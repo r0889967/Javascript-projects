@@ -10,7 +10,7 @@
         var blackScore = 0;
         var whiteScore = 0;
 
-        function turnToPiece(turn){
+        function mapPlayerTurnToPiece(turn){
             if(turn===0){
                 return "⚫";
             }else{
@@ -18,7 +18,7 @@
             }
         }
 
-        function pieceToMove(piece){
+        function mapPieceToPlayerTurn(piece){
             if(piece==="⚫"){
                 return 0;
             }else if (piece==="⚪️"){
@@ -103,17 +103,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i-1;
                         let col = j;
                         while(row >= 0){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById((row+1)+"-"+col);
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -129,17 +129,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i-1;
                         let col = j-1;
                         while(row >= 0 && col >= 0){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById((row+1)+"-"+(col+1));
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -157,17 +157,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i-1;
                         let col = j+1;
                         while(row >= 0 && col < 8){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById((row+1)+"-"+(col-1));
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -185,17 +185,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i+1;
                         let col = j;
                         while(row < 8){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById((row-1)+"-"+col);
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -212,17 +212,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i+1;
                         let col = j-1;
                         while(row < 8 && col >= 0){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById((row-1)+"-"+(col+1));
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -240,17 +240,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i+1;
                         let col = j+1;
                         while(row < 8 && col < 8){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById((row-1)+"-"+(col-1));
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -268,17 +268,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i;
                         let col = j-1;
                         while(col >= 0){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById(row+"-"+(col+1));
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -294,17 +294,17 @@
             for(let i=0; i<8; i++){
                 for(let j = 0; j < 8; j++){
                     let cell = document.getElementById(i+"-"+j);
-                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                    if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i;
                         let col = j+1;
                         while(col < 8){
                             let cell2 = document.getElementById(row+"-"+col);
-                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                            if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
                             }
                             if(cell2.innerHTML===""){
                                 let cell3 = document.getElementById(row+"-"+(col-1));
-                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                if(mapPieceToPlayerTurn(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
                                     cell2.classList.add("valid");
                                 }
                                 break;
@@ -334,13 +334,13 @@
             let cell = document.getElementById(row + "-" + col);
             let row2 = row;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 row2--;
                 cell2 = document.getElementById(row2 + "-" + col);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     row--;
                     cell = document.getElementById(row + "-" + col);
                 }
@@ -355,14 +355,14 @@
             let row2 = row;
             let col2 = col;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 row2--;
                 col2--;
                 cell2 = document.getElementById(row2 + "-" + col2);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     row--;
                     col--;
                     cell = document.getElementById(row + "-" + col);
@@ -378,14 +378,14 @@
             let row2 = row;
             let col2 = col;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 row2--;
                 col2++;
                 cell2 = document.getElementById(row2 + "-" + col2);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     row--;
                     col++;
                     cell = document.getElementById(row + "-" + col);
@@ -400,13 +400,13 @@
             let cell = document.getElementById(row + "-" + col);
             let row2 = row;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 row2++;
                 cell2 = document.getElementById(row2 + "-" + col);
             }
-            if(cell2!=null && pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null && mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     row++;
                     cell = document.getElementById(row + "-" + col);
                 }
@@ -421,14 +421,14 @@
             let row2 = row;
             let col2 = col;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 row2++;
                 col2--;
                 cell2 = document.getElementById(row2 + "-" + col2);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     row++;
                     col--;
                     cell = document.getElementById(row + "-" + col);
@@ -445,14 +445,14 @@
             let row2 = row;
             let col2 = col;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 row2++;
                 col2++;
                 cell2 = document.getElementById(row2 + "-" + col2);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     row++;
                     col++;
                     cell = document.getElementById(row + "-" + col);
@@ -467,13 +467,13 @@
             let cell = document.getElementById(row + "-" + col);
             let col2 = col;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 col2--;
                 cell2 = document.getElementById(row + "-" + col2);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     col--;
                     cell = document.getElementById(row + "-" + col);
                 }
@@ -487,13 +487,13 @@
             let cell = document.getElementById(row + "-" + col);
             let col2 = col;
             let cell2 = cell;
-            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+            while ((cell2!=null && cell2.innerHTML !== mapPlayerTurnToPiece(turn)) && cell2.innerHTML !== "") {
                 col2++;
                 cell2 = document.getElementById(row + "-" + col2);
             }
-            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
-                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
-                    cell.innerHTML = turnToPiece(turn);
+            if(cell2!=null &&mapPieceToPlayerTurn(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== mapPlayerTurnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = mapPlayerTurnToPiece(turn);
                     col++;
                     cell = document.getElementById(row + "-" + col);
                 }
@@ -505,7 +505,7 @@
         function placePiece(row,col){
             let cell = document.getElementById(row+"-"+col);
             if(cell.innerHTML==="" && cell.classList.contains("valid")) {
-                cell.innerHTML = turnToPiece(turn);
+                cell.innerHTML = mapPlayerTurnToPiece(turn);
                 flipPieces(turn,row,col);
                 countPieces();
                 alternateTurns();
@@ -523,7 +523,7 @@
 
         function alternateTurns(){
             turn = (turn+1)%2;
-            document.getElementById("turn").innerHTML = "轮到"+turnToPiece(turn)+"了";
+            document.getElementById("turn").innerHTML = "轮到"+mapPlayerTurnToPiece(turn)+"了";
         }
 
         function clearScores(){
