@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rock Paper Scissors</title>
+    <style>
+        #gamecontainer{
+            background-color: lightgray;
+            text-align: center;
+        }
+        h1{
+            font-size: 50px;
+        }
+        p{
+            font-size: 30px;
+        }
+        .g1{
+            height: 75px;
+            font-size: 50px;
+            width: 130px;
+        }
+        .g2{
+            height: 50px;
+            font-size: 25px;
+        }
+    </style>
+    <script>
+var playerScore = 0;
+var computerScore = 0;
+var playerMove;
+var computerMove;
+
+
+function playerPlay(move) {
+    playerMove = move;
+    computerPlay()
+    getWinner();
+}
+
+function computerPlay() {
+    computerMove = Math.floor(Math.random() * 3);
+    let computerMove_ = document.getElementById("computermove");
+    if (computerMove === 0) {
+        computerMove_.innerHTML = "Computer played 🪨!";
+    }else if (computerMove === 1) {
+        computerMove_.innerHTML = "Computer played 📄!";
+    }else if (computerMove === 2) {
+        computerMove_.innerHTML = "Computer played ✂️!";
+    }
+
+}
+
+function getWinner(){
+    let result = document.getElementById("result");
+    let scores = document.getElementById("scores");
+    if (playerMove === computerMove){
+        result.innerHTML = "Tie!"
+        result.style.color = "blue"
+    }else if (playerMove === 0 && computerMove === 1){
+        result.innerHTML = "Computer wins!"
+        result.style.color = "red"
+        scores.innerHTML = "Scores: Player "+ playerScore+"-"+ ++computerScore +" Computer";
+    }else if (playerMove === 0 && computerMove === 2){
+        result.innerHTML = "Player wins!"
+        result.style.color = "green"
+        scores.innerHTML = "Scores: Player "+ ++playerScore+"-"+computerScore +" Computer";
+    }else if (playerMove === 1 && computerMove === 0){
+        result.innerHTML = "Player wins!"
+        result.style.color = "green"
+        scores.innerHTML = "Scores: Player "+ ++playerScore+"-"+computerScore +" Computer";
+    }else if (playerMove === 1 && computerMove === 2){
+        result.innerHTML = "Computer wins!"
+        result.style.color = "red"
+        scores.innerHTML = "Scores: Player "+ playerScore+"-"+ ++computerScore +" Computer";
+    }else if (playerMove === 2 && computerMove === 0){
+        result.innerHTML = "Computer wins!"
+        result.style.color = "red"
+        scores.innerHTML = "Scores: Player "+ playerScore+"-"+ ++computerScore +" Computer";
+    }else if (playerMove === 2 && computerMove === 1){
+        result.innerHTML = "Player wins!"
+        result.style.color = "green"
+        scores.innerHTML = "Scores: Player "+ ++playerScore+"-"+computerScore +" Computer";
+    }
+}
+
+function resetScores(){
+    playerScore = 0;
+    computerScore = 0;
+    scores.innerHTML = "Scores: Player 0-0 Computer";
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("computermove").innerHTML = "";
+}
+
+</script>
+</head>
+<body>
+<div id="gamecontainer">
+<h1>Rock Paper Scissors</h1>
+<p>Play rock paper scissors against computer.</p>
+<button class="g1" onclick="playerPlay(0)">🪨</button>
+<button class="g1" onclick="playerPlay(1)">📄</button>
+<button class="g1" onclick="playerPlay(2)">✂️</button>
+<p id="scores">Scores: Player 0-0 Computer</p>
+<p id="computermove"></p>
+<p id="result"></p>
+<button class="g2" onclick="resetScores()">Reset scores</button>
+</div>
+</body>
+</html>

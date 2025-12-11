@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>闹钟</title>
+    <style>
+        #clockcontainer{
+            background-color: lightgray;
+            text-align: center;
+        }
+        h1{
+            font-size: 50px;
+        }
+        p{
+            font-size: 30px;
+        }
+        .g1{
+            height: 75px;
+            font-size: 25px;
+        }
+        #trigger{
+            background-color: lightgreen;
+        }
+        #stop{
+            background-color: red;
+        }
+
+    </style>
+    <script>
+        var time = setInterval(setTime,1000);
+        var alarmActive = false;
+        var hour = new Date().getHours();
+        var minute = new Date().getMinutes();
+        var second = new Date().getSeconds()
+        var alarmHour = "00";
+        var alarmMinute = "00";
+        var alarmSecond = "00";
+        var alarmSound = new Audio(
+            'https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+
+        function setTime() {
+            hour = new Date().getHours();
+            minute = new Date().getMinutes();
+            second = new Date().getSeconds()
+            if(hour<10){
+                hour='0'+hour;
+            }
+            if(minute<10){
+                minute='0'+minute;
+            }
+            if(second<10){
+                second='0'+second;
+            }
+            document.getElementById("time").innerHTML = "当前时间: "+hour+':'+minute+":"+second;
+            if(hour===alarmHour && minute===alarmMinute && second===alarmSecond){
+                alarmActive = true;
+            }
+            if(alarmActive){
+                ringAlarm();
+            }
+
+        }
+
+        function ringAlarm(){
+            alarmSound.play();
+            let container = document.getElementById("clockcontainer");
+            if(container.style.backgroundColor === "lightgrey") {
+                document.getElementById("clockcontainer").style.backgroundColor = "red";
+            }else{
+                document.getElementById("clockcontainer").style.backgroundColor = "lightgrey";
+            }
+        }
+
+        function stopAlarm(){
+            alarmActive = false;
+            document.getElementById("clockcontainer").style.backgroundColor = "lightgrey";
+        }
+
+        function triggerAlarm(){
+            alarmActive = true;
+        }
+
+        function incrementTime(){
+            setTime()
+        }
+
+        function setHour(){
+            alarmHour++;
+            if(alarmHour > 23){
+                alarmHour = 0
+            }
+            if(alarmHour<10){
+                alarmHour = "0"+alarmHour;
+            }
+            document.getElementById("alarmtime").innerHTML = "响铃时间: "+alarmHour+":"+alarmMinute+":"+alarmSecond;
+        }
+
+        function setMinute(){
+            alarmMinute++;
+            if(alarmMinute > 59){
+                alarmMinute = 0;
+            }
+            if(alarmMinute<10){
+                alarmMinute = "0"+alarmMinute;
+            }
+            document.getElementById("alarmtime").innerHTML = "响铃时间: "+alarmHour+":"+alarmMinute+":"+alarmSecond;
+        }
+
+        function setSecond(){
+            alarmSecond++;
+            if(alarmSecond > 59){
+                alarmSecond = 0;
+            }
+            if(alarmSecond<10){
+                alarmSecond = "0"+alarmSecond;
+            }
+            document.getElementById("alarmtime").innerHTML = "响铃时间: "+alarmHour+":"+alarmMinute+":"+alarmSecond;
+        }
+    </script>
+</head>
+<body onload="setTime()">
+<div id="clockcontainer">
+<h1>闹钟</h1>
+<p id="time"></p>
+<p id="alarmtime">响铃时间: 00:00:00</p>
+    <button class="g1" onclick="setHour()">设置小时</button>
+    <button class="g1" onclick="setMinute()">设置分钟</button>
+    <button class="g1" onclick="setSecond()">设置秒钟</button>
+    <button class="g1" id="trigger" onclick="triggerAlarm()">测试闹钟</button>
+    <button class="g1" id="stop" onclick="stopAlarm()">停止闹钟</button>
+</div>
+</body>
+</html>

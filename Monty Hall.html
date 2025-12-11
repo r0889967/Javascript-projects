@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Monty Hall</title>
+    <style>
+        #gamecontainer{
+            background-color: lightgray;
+            text-align: center;
+        }
+        h1{
+            font-size: 50px;
+        }
+        p{
+            font-size: 30px;
+        }
+        .g1{
+            height: 75px;
+            font-size: 25px;
+            width: 130px;
+        }
+        .g2{
+            height: 50px;
+            font-size: 25px;
+        }
+
+    </style>
+    <script>
+var myChoice;
+var hintDoor;
+var carDoor = Math.floor(Math.random() * 3);
+var games = 0;
+var gamesWon = 0;
+
+function choose(choice) {
+    myChoice = choice;
+    document.getElementById("1").disabled = true;
+    document.getElementById("2").disabled = true;
+    document.getElementById("3").disabled = true;
+    document.getElementById("stay").disabled = false;
+    document.getElementById("switch").disabled = false;
+    document.getElementById("yourchoice").innerHTML = "You chose door "+myChoice+"!";
+    revealHint();
+}
+
+function revealHint(){
+    hintDoor = Math.floor(Math.random() * 3);
+    while (hintDoor === carDoor){
+        hintDoor = Math.floor(Math.random() * 3);
+    }
+    document.getElementById("hint").innerHTML = "Goat at door "+hintDoor+", stay or switch?"
+}
+
+function switchDoor(){
+    let myChoice2 = Math.floor(Math.random() * 3);
+    while(myChoice2 === myChoice || myChoice2 === hintDoor) {
+        myChoice2 = Math.floor(Math.random() * 3);
+    }
+    myChoice = myChoice2;
+    document.getElementById("yourchoice").innerHTML = "You switched to door "+myChoice+"!";
+    revealCar();
+}
+
+function revealCar(){
+    document.getElementById("hint").innerHTML = ""
+    document.getElementById("answer").innerHTML = "Car at door "+carDoor+"!";
+    let result = document.getElementById("result");
+    if (myChoice === carDoor){
+        result.innerHTML = "You won!"
+        result.style.color = "green"
+        gamesWon++;
+    }else{
+        result.innerHTML = "You lost!"
+        result.style.color = "red"
+    }
+    document.getElementById("stay").disabled = true;
+    document.getElementById("switch").disabled = true;
+    games++;
+    document.getElementById("winratio").innerHTML = "Your win rate is: "+(gamesWon/games)*100+"%"
+}
+
+function restart(){
+    document.getElementById("1").disabled = false;
+    document.getElementById("2").disabled = false;
+    document.getElementById("3").disabled = false;
+    document.getElementById("yourchoice").innerHTML = "";
+    document.getElementById("hint").innerHTML = ""
+    document.getElementById("answer").innerHTML = "";
+    document.getElementById("result").innerHTML = "";
+    carDoor = Math.floor(Math.random() * 3);
+}
+</script>
+</head>
+<body>
+<div id="gamecontainer">
+<h1>Monty Hall</h1>
+<p>Find the door with the car!</p>
+<button class="g1" id="1" onclick="choose(0)">Door 0</button>
+<button class="g1" id="2" onclick="choose(1)">Door 1</button>
+<button class="g1" id="3" onclick="choose(2)">Door 2</button>
+<p id="yourchoice"></p>
+<p id="hint"></p>
+<button class="g2" id="stay" disabled onclick="revealCar()">Stay</button>
+<button class="g2" id="switch" disabled onclick="switchDoor()">Switch</button>
+<p id="answer"></p>
+<p id="result"></p>
+<p id="winratio">Your win rate is: 0%</p>
+<button class="g2" id="Restart" onclick="restart()">Restart</button>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>4 In A Row</title>
+    <style>
+
+        #fourinarowcontainer{
+            background-color: SkyBlue;
+            text-align: center;
+            place-items: center;
+        }
+        #board{
+            background-color: darkblue;
+        }
+        h1{
+            font-size: 50px;
+        }
+        .g1{
+            height: 75px;
+            font-size: 25px;
+        }
+        p{
+            font-size: 20px;
+        }
+        td{
+            border: 10px solid darkblue;
+            border-radius: 50px;
+            font-size: 43px;
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            background-color: blue;
+        }
+    </style>
+    <script>
+        var turn = 0;
+        var finished = false;
+        var scores = [0,0];
+
+        function turnToSymbol(turn){
+            if(turn === 0){
+                return "🔴";
+            }else{
+                return "🟡";
+            }
+        }
+
+        function generateBoard(){
+            let board = document.getElementById("board")
+            boardHtml = "";
+            for (let i = 0; i < 6; i++) {
+                boardHtml += "<tr>";
+                for (let j = 0; j < 7; j++){
+                    let cellStartTag = "<td";
+                    let cellOnClickStr = " onclick=placePiece("+j+")"
+                    let cellId = " id="+i+"-"+j+">";
+                    let cellEndTag = "</td>";
+                    boardHtml += cellStartTag + cellOnClickStr + cellId+ cellEndTag;
+                }
+                boardHtml += "</tr>";
+            }
+            board.innerHTML = boardHtml;
+        }
+
+        function placePiece(col){
+            if(!finished) {
+                let topCell = document.getElementById(0 + "-" + col)
+                if (topCell.innerText === "") {
+                    let row = 5;
+                    let targetCell = document.getElementById(row + "-" + col);
+                    while(targetCell.innerText !== ""){
+                        row--;
+                        targetCell = document.getElementById(row + "-" + col);
+                    }
+                    if (turn === 0) {
+                        targetCell.innerHTML = "🔴";
+                    } else {
+                        targetCell.innerHTML = "🟡";
+                    }
+                    checkWinner();
+                    if(!finished){
+                        alternateTurns();
+                    }
+                }
+            }
+        }
+
+        function checkWinner(){
+            checkH();
+            checkV();
+            checkD1();
+            checkD2();
+        }
+
+        function alternateTurns(){
+            turn = (turn + 1) % 2;
+            document.getElementById("turn").innerHTML = "Player "+turnToSymbol(turn)+"'s turn";
+        }
+
+        function restart(){
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 7; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    cell.innerHTML = "";
+                }
+            }
+            turn = 0;
+            finished = false;
+            document.getElementById("winner").innerHTML = "";
+            document.getElementById("turn").innerHTML = "Player 🔴's turn";
+        }
+
+        function cleanScores(){
+            scores = [0,0];
+            document.getElementById("scores").innerHTML = "Scores:🔴 0-0 🟡"
+        }
+
+        function areEqual(cell0,cell1,cell2,cell3){
+            return cell0.innerHTML !== "" && cell0.innerHTML === cell1.innerHTML && cell1.innerHTML === cell2.innerHTML &&
+                cell2.innerHTML === cell3.innerHTML;
+        }
+
+        function checkH(){
+            for (let i = 0; i < 6; i++) {
+                for (let j = 0; j < 4; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById(i+"-"+(j+1));
+                    let cell2 = document.getElementById(i+"-"+(j+2));
+                    let cell3 = document.getElementById(i+"-"+(j+3));
+                    if(areEqual(cell0,cell1,cell2,cell3)){
+                        endGame();
+                    }
+                }
+            }
+        }
+
+        function checkV(){
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 7; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById((i+1)+"-"+j);
+                    let cell2 = document.getElementById((i+2)+"-"+j);
+                    let cell3 = document.getElementById((i+3)+"-"+j);
+                    if(areEqual(cell0,cell1,cell2,cell3)){
+                        endGame();
+                    }
+                }
+            }
+        }
+
+        function checkD1(){
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 4; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById((i+1)+"-"+(j+1));
+                    let cell2 = document.getElementById((i+2)+"-"+(j+2));
+                    let cell3 = document.getElementById((i+3)+"-"+(j+3));
+                    if(areEqual(cell0,cell1,cell2,cell3)){
+                        endGame();
+                    }
+                }
+            }
+        }
+
+        function checkD2(){
+            for (let i = 0; i < 3; i++) {
+                for (let j = 3; j < 7; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById((i+1)+"-"+(j-1));
+                    let cell2 = document.getElementById((i+2)+"-"+(j-2));
+                    let cell3 = document.getElementById((i+3)+"-"+(j-3));
+                    if(areEqual(cell0,cell1,cell2,cell3)){
+                        endGame();
+                    }
+                }
+            }
+        }
+
+        function endGame(){
+            document.getElementById("winner").innerHTML = "Player "+turnToSymbol(turn)+" has won!"
+            scores[turn]++;
+            document.getElementById("scores").innerHTML = "Scores:🔴 "+scores[0]+"-"+scores[1]+" 🟡"
+            finished = true;
+        }
+    </script>
+</head>
+<body onload="generateBoard()">
+<div id="fourinarowcontainer">
+    <h1>4 In A Row</h1>
+    <table id="board"></table>
+    <p id="turn">Player 🔴's turn</p>
+    <p id="scores">Scores:🔴 0-0 🟡</p>
+    <p id="winner"></p>
+    <button class = "g1" onclick="restart()">Restart</button>
+    <button class = "g1" onclick="cleanScores()">Reset Scores</button>
+</div>
+
+
+
+</body>
+</html>

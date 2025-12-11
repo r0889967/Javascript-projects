@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>五子棋</title>
+    <style>
+
+        #gomokucontainer{
+            background-color: peachpuff;
+            text-align: center;
+            place-items: center;
+        }
+        #board{
+            background-color: saddlebrown;
+        }
+        h1{
+            font-size: 50px;
+            margin-bottom: 5px;
+        }
+        .g1{
+            height: 40px;
+            font-size: 25px
+        }
+        p{
+            font-size: 20px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        td{
+            border: 2px solid saddlebrown;
+            font-size: 25px;
+            width: 35px;
+            height: 35px;
+            text-align: center;
+            background-color: orange;
+        }
+    </style>
+    <script>
+        var turn = 0;
+        var finished = false;
+        var scores = [0,0];
+
+        function turnToSymbol(turn){
+            if(turn === 0){
+                return "⚫";
+            }else{
+                return "⚪️";
+            }
+        }
+
+        function generateBoard(){
+            let board = document.getElementById("board")
+            boardHtml = "";
+            for (let i = 0; i < 15; i++) {
+                boardHtml += "<tr>";
+                for (let j = 0; j < 15; j++){
+                    let cellStartTag = "<td";
+                    let cellOnClickStr = " onclick=placePiece("+i+","+j+")"
+                    let cellId = " id="+i+"-"+j+">";
+                    let cellEndTag = "</td>";
+                    boardHtml += cellStartTag + cellOnClickStr + cellId+ cellEndTag;
+                }
+                boardHtml += "</tr>";
+            }
+            board.innerHTML = boardHtml;
+        }
+
+        function placePiece(row,col){
+            if(!finished) {
+                let cell = document.getElementById(row + "-" + col)
+                if (cell.innerText === "") {
+                    if (turn === 0) {
+                        cell.innerHTML = "⚫";
+                    } else {
+                        cell.innerHTML = "⚪️";
+                    }
+                    checkWinner();
+                    if (!finished) {
+                        alternateTurns()
+                    }
+                }
+            }
+        }
+
+        function checkWinner(){
+            checkH();
+            checkV();
+            checkD1();
+            checkD2();
+        }
+        function alternateTurns(){
+            turn = (turn + 1) % 2;
+            document.getElementById("turn").innerHTML = "轮到"+turnToSymbol(turn)+"了";
+        }
+
+        function restart(){
+            for (let i = 0; i < 15; i++) {
+                for (let j = 0; j < 15; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    cell.innerHTML = "";
+                }
+            }
+            turn = 0;
+            finished = false;
+            document.getElementById("winner").innerHTML = "";
+            document.getElementById("turn").innerHTML = "轮到⚫了";
+        }
+
+        function cleanScores(){
+            scores = [0,0];
+            document.getElementById("scores").innerHTML = "当前比分:⚫ 0-0 ⚪"
+        }
+
+        function areEqual(cell0,cell1,cell2,cell3,cell4){
+            return cell0.innerHTML !== "" && cell0.innerHTML === cell1.innerHTML && cell1.innerHTML === cell2.innerHTML &&
+                cell2.innerHTML === cell3.innerHTML && cell3.innerHTML === cell4.innerHTML;
+        }
+
+        function checkH(){
+            for (let i = 0; i < 15; i++) {
+                for (let j = 0; j < 11; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById(i+"-"+(j+1));
+                    let cell2 = document.getElementById(i+"-"+(j+2));
+                    let cell3 = document.getElementById(i+"-"+(j+3));
+                    let cell4 = document.getElementById(i+"-"+(j+4));
+                    if(areEqual(cell0,cell1,cell2,cell3,cell4)){
+                        endGame()
+                    }
+                }
+            }
+        }
+
+        function checkV(){
+            for (let i = 0; i < 11; i++) {
+                for (let j = 0; j < 15; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById((i+1)+"-"+j);
+                    let cell2 = document.getElementById((i+2)+"-"+j);
+                    let cell3 = document.getElementById((i+3)+"-"+j);
+                    let cell4 = document.getElementById((i+4)+"-"+j);
+                    if(areEqual(cell0,cell1,cell2,cell3,cell4)){
+                        endGame()
+                    }
+                }
+            }
+        }
+
+        function checkD1(){
+            for (let i = 0; i < 11; i++) {
+                for (let j = 0; j < 11; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById((i+1)+"-"+(j+1));
+                    let cell2 = document.getElementById((i+2)+"-"+(j+2));
+                    let cell3 = document.getElementById((i+3)+"-"+(j+3));
+                    let cell4 = document.getElementById((i+4)+"-"+(j+4));
+                    if(areEqual(cell0,cell1,cell2,cell3,cell4)){
+                        endGame()
+                    }
+                }
+            }
+        }
+
+        function checkD2(){
+            for (let i = 0; i < 11; i++) {
+                for (let j = 4; j < 15; j++){
+                    let cell0 = document.getElementById(i+"-"+j);
+                    let cell1 = document.getElementById((i+1)+"-"+(j-1));
+                    let cell2 = document.getElementById((i+2)+"-"+(j-2));
+                    let cell3 = document.getElementById((i+3)+"-"+(j-3));
+                    let cell4 = document.getElementById((i+4)+"-"+(j-4));
+                    if(areEqual(cell0,cell1,cell2,cell3,cell4)){
+                        endGame()
+                    }
+                }
+            }
+        }
+
+        function endGame(){
+            document.getElementById("winner").innerHTML = turnToSymbol(turn)+"赢了!"
+            scores[turn]++;
+            document.getElementById("scores").innerHTML = "当前比分:⚫ "+scores[0]+"-"+scores[1]+" ⚪️"
+            finished = true;
+        }
+    </script>
+</head>
+<body onload="generateBoard()">
+</div>
+<div id="gomokucontainer">
+<h1>五子棋</h1>
+<table id="board"></table>
+<p id="turn">轮到⚫了</p>
+<p id="scores">当前比分:⚫ 0-0 ⚪️</p>
+<p id="winner"></p>
+<button class = "g1" onclick="restart()">新一局</button>
+<button class = "g1" onclick="cleanScores()">重置比分</button>
+</div>
+
+
+
+</body>
+</html>

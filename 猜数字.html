@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>猜数字</title>
+    <style>
+        #gamecontainer{
+            background-color: lightgray;
+            text-align: center;
+        }
+        h1{
+            font-size: 50px;
+        }
+
+        p{
+            font-size: 30px;
+        }
+        #check{
+            background-color: lightgreen;
+        }
+        .g1{
+            color: white;
+            height: 45px;
+            font-size: 25px;
+        }
+        .g2{
+            height: 50px;
+            font-size: 25px;
+        }
+        #dif0{
+            background-color: green;
+        }
+        #dif1{
+            background-color: gold;
+        }
+        #dif2{
+            background-color: darkorange;
+        }
+        #dif3{
+            background-color: red;
+        }
+
+    </style>
+    <script>
+var upperBound = 101;
+var target = Math.floor((Math.random() * upperBound));
+var finished = false;
+
+
+function check(){
+    if(!finished) {
+        let result = document.getElementById("result");
+        let num = document.getElementById("input").value;
+        if (num > target) {
+            result.innerHTML = "太大了!";
+            result.style.color = "red";
+        } else if (num < target) {
+            result.innerHTML = "太小了!";
+            result.style.color = "red";
+        } else {
+            result.innerHTML = "你猜对了数字!";
+            result.style.color = "green";
+            finished = true;
+        }
+    }
+}
+
+function changeDifficulty(dif){
+    let difficulty = document.getElementById("difficulty");
+    if(dif===0){
+        difficulty.innerHTML = "难度: 简单";
+        difficulty.style.color = "green";
+        upperBound = 11;
+    }else if (dif===1){
+        difficulty.innerHTML = "难度: 普通";
+        difficulty.style.color = "gold";
+        upperBound = 101;
+    }else if (dif===2){
+        difficulty.innerHTML = "难度: 困难";
+        difficulty.style.color = "DarkOrange";
+        upperBound = 1001;
+    }else if (dif===3){
+        difficulty.innerHTML = "难度: 极难";
+        difficulty.style.color = "red";
+        upperBound = 10001;
+    }
+    restart()
+}
+
+function restart(){
+    let result = document.getElementById("result");
+    result.innerHTML = "";
+    target = Math.floor((Math.random() * upperBound));
+    document.getElementById("input").value = "";
+    finished = false;
+}
+</script>
+</head>
+<body>
+<div id="gamecontainer">
+<h1>猜数字</h1>
+<p id="difficulty" style="color:gold;">难度: 普通</p>
+<input type="number" class="g2" id="input">
+<button class="g2" id="check" onclick="check()">提交答案</button>
+<br>
+<p id="result"></p>
+<button class="g1" id="dif0" onclick="changeDifficulty(0)">简单(0-10)</button>
+<button class="g1" id="dif1" onclick="changeDifficulty(1)">普通(0-100)</button>
+<button class="g1" id="dif2" onclick="changeDifficulty(2)">困难(0-1000)</button>
+<button class="g1" id="dif3" onclick="changeDifficulty(3)">极难(0-10000)</button>
+<br>
+<br>
+<button class="g2" id="restart" onclick="restart()">再玩一局</button>
+</div>
+</body>
+</html>

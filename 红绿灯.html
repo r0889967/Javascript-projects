@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>红绿灯</title>
+    <script>
+        var state = "red";
+        var minTimeRange = 10;
+        var maxTimeRange = 60;
+        var redTime = Math.floor(minTimeRange+maxTimeRange*Math.random());
+        var yellowTime = 0;
+        var greenTime = 0;
+        var showTimer = false;
+        var paused = false;
+        var controller = setInterval(countDown,1000);
+
+        function showSignalTime(){
+            showTimer = !showTimer;
+        }
+
+        function pauseSignal(){
+            paused = !paused;
+        }
+
+        function countDown() {
+            if (paused) {
+                document.getElementById("red").style.backgroundColor = "#575555";
+                document.getElementById("yellow").innerHTML = "";
+                document.getElementById("green").style.backgroundColor = "#575555";
+                if(document.getElementById("yellow").style.backgroundColor === "yellow"){
+                    document.getElementById("yellow").style.backgroundColor = "#575555";
+                }else{
+                    document.getElementById("yellow").style.backgroundColor = "yellow";
+                }
+
+            } else {
+                if (state === "red") {
+                    document.getElementById("red").style.backgroundColor = "red";
+                    document.getElementById("yellow").style.backgroundColor = "#575555";
+                    if (showTimer) {
+                        document.getElementById("yellow").style.color = "red";
+                        document.getElementById("yellow").innerHTML = redTime;
+                    } else {
+                        document.getElementById("yellow").style.backgroundColor = "#575555";
+                        document.getElementById("yellow").innerHTML = "";
+                    }
+
+                    if (redTime > 0) {
+                        redTime--;
+                    } else {
+                        state = "green";
+                        greenTime += Math.floor(minTimeRange + maxTimeRange * Math.random());
+                    }
+                } else if (state === "green") {
+                    document.getElementById("red").style.backgroundColor = "#575555";
+                    if (showTimer) {
+                        document.getElementById("yellow").style.color = "lightgreen";
+                        document.getElementById("yellow").style.backgroundColor = "#575555";
+                        document.getElementById("yellow").innerHTML = greenTime;
+                    } else {
+                        document.getElementById("yellow").style.backgroundColor = "#575555";
+                        document.getElementById("yellow").innerHTML = "";
+                    }
+                    document.getElementById("green").style.backgroundColor = "lightgreen";
+
+                    if (greenTime > 0) {
+                        greenTime--;
+                    } else {
+                        state = "yellow";
+                        yellowTime += 3;
+                    }
+                } else {
+                    document.getElementById("yellow").style.backgroundColor = "yellow";
+                    document.getElementById("yellow").innerHTML = "";
+                    document.getElementById("green").style.backgroundColor = "#575555";
+                    if (yellowTime > 0) {
+                        yellowTime--;
+                    } else {
+                        state = "red";
+                        redTime += Math.floor(minTimeRange + maxTimeRange * Math.random());
+                    }
+                }
+            }
+        }
+
+    </script>
+    <style>
+        #signalcontainer{
+            background-color: lightgray;
+            text-align: center;
+            place-items: center;
+        }
+        h1{
+            font-size: 50px;
+        }
+        #signal{
+            background-color: #151515;
+        }
+        td{
+            text-align: center;
+            width: 100px;
+            height: 100px;
+            font-size: 75px;
+            background-color: #575555;
+            border: 15px solid #151515;
+            border-radius: 80px;
+        }
+        p{
+            font-size: 30px;
+        }
+        input{
+            width: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body onload="countDown()">
+<div id="signalcontainer">
+    <h1>红绿灯</h1>
+    <table id="signal">
+        <tr>
+            <td id="red"></td>
+        </tr>
+        <tr>
+            <td id="yellow"></td>
+        </tr>
+        <tr>
+            <td id="green"></td>
+        </tr>
+    </table>
+    <p>显示倒计时:<input id="showtimer" type="checkbox" onclick="showSignalTime()"></p>
+    <p>黄灯闪烁:<input id="pausesignal" type="checkbox" onclick="pauseSignal()"></p>
+
+
+</div>
+</body>
+</html>

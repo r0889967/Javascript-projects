@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>翻转棋</title>
+    <script>
+        var turn = 0;
+        var blackCount = 2;
+        var whiteCount = 2;
+        var blackScore = 0;
+        var whiteScore = 0;
+
+        function turnToPiece(turn){
+            if(turn===0){
+                return "⚫";
+            }else{
+                return "⚪️";
+            }
+        }
+
+        function pieceToMove(piece){
+            if(piece==="⚫"){
+                return 0;
+            }else if (piece==="⚪️"){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
+
+
+        function generateBoard(){
+            let board = document.getElementById("board")
+            boardHtml = "";
+            for (let i = 0; i < 8; i++) {
+                boardHtml += "<tr>";
+                for (let j = 0; j < 8; j++){
+                    let cellStartTag = "<td";
+                    let cellOnClickStr = " onclick=placePiece("+i+","+j+")"
+                    let cellId = " id="+i+"-"+j+">";
+                    let cellEndTag = "</td>";
+                    boardHtml += cellStartTag + cellOnClickStr + cellId+ cellEndTag;
+                }
+                boardHtml += "</tr>";
+            }
+            board.innerHTML = boardHtml;
+            document.getElementById("2-3").classList.add("valid");
+            document.getElementById("3-2").classList.add("valid");
+            document.getElementById("3-3").innerHTML = "⚪️";
+            document.getElementById("3-4").innerHTML = "⚫";
+            document.getElementById("4-3").innerHTML = "⚫";
+            document.getElementById("4-4").innerHTML = "⚪️";
+            document.getElementById("4-5").classList.add("valid");
+            document.getElementById("5-4").classList.add("valid");
+        }
+
+        function noMoves(){
+            for(let i = 0; i < 8; i++){
+                for (let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(cell.classList.contains("valid")){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        function countPieces(){
+            blackCount = 0;
+            whiteCount = 0;
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(cell.innerHTML==="⚫"){
+                        blackCount++;
+                    }else if(cell.innerHTML==="⚪️"){
+                        whiteCount++;
+                    }
+                }
+            }
+            document.getElementById("piececount").innerHTML = "当前棋子数量:⚫ "+blackCount+"-"+whiteCount+" ⚪️";
+        }
+
+        function markPossibleMoves(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    cell.classList.remove("valid");
+                }
+            }
+            markUp(turn);
+            markUpLeft(turn);
+            markUpRight(turn);
+            markDown(turn);
+            markDownLeft(turn);
+            markDownRight(turn);
+            markLeft(turn);
+            markRight(turn);
+        }
+
+        function markUp(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i-1;
+                        let col = j;
+                        while(row >= 0){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById((row+1)+"-"+col);
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            row--;
+                        }
+                    }
+                }
+            }
+        }
+
+        function markUpLeft(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i-1;
+                        let col = j-1;
+                        while(row >= 0 && col >= 0){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById((row+1)+"-"+(col+1));
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            row--;
+                            col--;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        function markUpRight(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i-1;
+                        let col = j+1;
+                        while(row >= 0 && col < 8){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById((row+1)+"-"+(col-1));
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            row--;
+                            col++;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        function markDown(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i+1;
+                        let col = j;
+                        while(row < 8){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById((row-1)+"-"+col);
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            row++;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        function markDownLeft(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i+1;
+                        let col = j-1;
+                        while(row < 8 && col >= 0){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById((row-1)+"-"+(col+1));
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            row++;
+                            col--;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        function markDownRight(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i+1;
+                        let col = j+1;
+                        while(row < 8 && col < 8){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById((row-1)+"-"+(col-1));
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            row++;
+                            col++;
+                        }
+                    }
+                }
+            }
+
+        }
+
+        function markLeft(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i;
+                        let col = j-1;
+                        while(col >= 0){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById(row+"-"+(col+1));
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            col--;
+                        }
+                    }
+                }
+            }
+        }
+
+        function markRight(turn){
+            for(let i=0; i<8; i++){
+                for(let j = 0; j < 8; j++){
+                    let cell = document.getElementById(i+"-"+j);
+                    if(pieceToMove(cell.innerHTML)===turn && cell.innerHTML !== ""){
+                        let row = i;
+                        let col = j+1;
+                        while(col < 8){
+                            let cell2 = document.getElementById(row+"-"+col);
+                            if(pieceToMove(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
+                                break;
+                            }
+                            if(cell2.innerHTML===""){
+                                let cell3 = document.getElementById(row+"-"+(col-1));
+                                if(pieceToMove(cell3.innerHTML)===(turn+1)%2 && cell3.innerHTML !== "") {
+                                    cell2.classList.add("valid");
+                                }
+                                break;
+                            }
+                            col++;
+                        }
+                    }
+                }
+            }
+        }
+
+        function flipPieces(turn,row,col){
+            flipUp(turn,row-1,col);
+            flipUpLeft(turn,row-1,col-1);
+            flipUpRight(turn,row-1,col+1);
+            flipDown(turn,row+1,col);
+            flipDownLeft(turn,row+1,col-1);
+            flipDownRight(turn,row+1,col+1);
+            flipLeft(turn,row,col-1);
+            flipRight(turn,row,col+1);
+        }
+
+        function flipUp(turn,row,col){
+            if(row===0 || (row>0 && document.getElementById((row-1) + "-" + col).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row + "-" + col);
+            let row2 = row;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                row2--;
+                cell2 = document.getElementById(row2 + "-" + col);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    row--;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipUpLeft(turn,row,col){
+            if(row===0 || col===0 || (row>0 && col>0 && document.getElementById((row-1) + "-" + (col-1)).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row + "-" + col);
+            let row2 = row;
+            let col2 = col;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                row2--;
+                col2--;
+                cell2 = document.getElementById(row2 + "-" + col2);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    row--;
+                    col--;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipUpRight(turn,row,col){
+            if(row===0 || col===7 || (row>0 && col<7 && document.getElementById((row-1) + "-" + (col+1)).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row+"-"+col);
+            let row2 = row;
+            let col2 = col;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                row2--;
+                col2++;
+                cell2 = document.getElementById(row2 + "-" + col2);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    row--;
+                    col++;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipDown(turn,row,col){
+            if(row===7 || (row<7 && document.getElementById((row+1) + "-" + col).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row + "-" + col);
+            let row2 = row;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                row2++;
+                cell2 = document.getElementById(row2 + "-" + col);
+            }
+            if(cell2!=null && pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    row++;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipDownLeft(turn,row,col){
+            if(row===7 || col===0 || (row<7 && col>0 && document.getElementById((row+1) + "-" + (col-1)).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row + "-" + col);
+            let row2 = row;
+            let col2 = col;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                row2++;
+                col2--;
+                cell2 = document.getElementById(row2 + "-" + col2);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    row++;
+                    col--;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipDownRight(turn,row,col){
+            if(row===7 || col===7 || (row<7 && col<7 && document.getElementById((row+1) + "-" + (col+1)).innerHTML==="")){
+                return;
+            }
+
+            let cell = document.getElementById(row+"-"+col);
+            let row2 = row;
+            let col2 = col;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                row2++;
+                col2++;
+                cell2 = document.getElementById(row2 + "-" + col2);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    row++;
+                    col++;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipLeft(turn,row,col){
+            if(col===0 || (col>0 && document.getElementById(row + "-" + (col-1)).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row + "-" + col);
+            let col2 = col;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                col2--;
+                cell2 = document.getElementById(row + "-" + col2);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    col--;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+        }
+
+        function flipRight(turn,row,col){
+            if(col===7 || (col<7 && document.getElementById(row + "-" + (col+1)).innerHTML==="")){
+                return;
+            }
+            let cell = document.getElementById(row + "-" + col);
+            let col2 = col;
+            let cell2 = cell;
+            while ((cell2!=null && cell2.innerHTML !== turnToPiece(turn)) && cell2.innerHTML !== "") {
+                col2++;
+                cell2 = document.getElementById(row + "-" + col2);
+            }
+            if(cell2!=null &&pieceToMove(cell2.innerHTML)===turn) {
+                while ((cell != null && cell.innerHTML !== turnToPiece(turn)) && cell.innerHTML !== "") {
+                    cell.innerHTML = turnToPiece(turn);
+                    col++;
+                    cell = document.getElementById(row + "-" + col);
+                }
+            }
+
+        }
+
+
+        function placePiece(row,col){
+            let cell = document.getElementById(row+"-"+col);
+            if(cell.innerHTML==="" && cell.classList.contains("valid")) {
+                cell.innerHTML = turnToPiece(turn);
+                flipPieces(turn,row,col);
+                countPieces();
+                alternateTurns();
+                markPossibleMoves(turn);
+                if(noMoves()){
+                    alternateTurns();
+                    markPossibleMoves(turn);
+                    if(noMoves()){
+                        endGame();
+                    }
+                }
+            }
+
+        }
+
+        function alternateTurns(){
+            turn = (turn+1)%2;
+            document.getElementById("turn").innerHTML = "轮到"+turnToPiece(turn)+"了";
+        }
+
+        function clearScores(){
+            document.getElementById("scores").innerHTML = "当前比分:⚫ 0-0 ⚪️";
+        }
+
+        function restart(){
+            generateBoard()
+            turn = 0;
+            document.getElementById("turn").innerHTML = "轮到⚫了";
+            document.getElementById("piececount").innerHTML = "当前棋子数量:⚫ 2-2 ⚪️";
+            document.getElementById("winner").innerHTML = "";
+        }
+
+        function endGame(){
+            if(blackCount>whiteCount){
+                document.getElementById("winner").innerHTML = "⚫赢了!"
+                blackScore++;
+            }else if(blackCount<whiteCount){
+                document.getElementById("winner").innerHTML = "⚪️赢了!"
+                whiteScore++;
+            }else{
+                document.getElementById("winner").innerHTML = "双方平局！";
+            }
+            document.getElementById("scores").innerHTML = "当前比分:⚫ "+blackScore+"-"+whiteScore+" ⚪️";
+        }
+
+    </script>
+    <style>
+        #gamecontainer{
+            background-color: lightgreen;
+            text-align: center;
+            place-items: center;
+        }
+        h1{
+            font-size: 50px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        p{
+            font-size: 30px;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+        #board{
+            background-color: black;
+        }
+        td{
+            border: 2px solid black;
+            font-size: 36px;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            background-color: green;
+        }
+        .valid{
+            background-color: lightblue;
+        }
+        p{
+            font-size: 20px;
+        }
+        .g1{
+            height: 40px;
+            font-size: 25px
+        }
+    </style>
+</head>
+<body onload="generateBoard()">
+<div id="gamecontainer">
+    <h1>翻转棋</h1>
+    <table id="board"></table>
+    <p id="turn">轮到⚫了</p>
+    <p id="piececount">当前棋子数量:⚫ 2-2 ⚪️</p>
+    <p id="scores">当前比分:⚫ 0-0 ⚪️</p>
+    <p id="winner"></p>
+    <button class = "g1" onclick="restart()">新一局</button>
+    <button class = "g1" onclick="clearScores()">重置比分</button>
+</div>
+
+</body>
+</html>
