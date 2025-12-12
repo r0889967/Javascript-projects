@@ -7,17 +7,23 @@
         #gamecontainer{
             background-color: lightgray;
             text-align: center;
+            place-items: center;
+        }
+        #infopanel{
+            background-color: #acacac;
+            border: 2px solid black;
+            width: 25%;
         }
         h1{
             font-size: 50px;
         }
         p{
-            font-size: 30px;
+            font-size: 20px;
         }
         .g1{
-            height: 75px;
+            height: 85px;
             font-size: 50px;
-            width: 130px;
+            width: 200px;
         }
         .g2{
             height: 50px;
@@ -41,11 +47,11 @@ function computerPlay() {
     computerMove = Math.floor(Math.random() * 3);
     let computerMove_ = document.getElementById("computermove");
     if (computerMove === 0) {
-        computerMove_.innerHTML = "Computer played 🪨!";
+        computerMove_.innerHTML = "计算机出🪨";
     }else if (computerMove === 1) {
-        computerMove_.innerHTML = "Computer played 📄!";
+        computerMove_.innerHTML = "计算机出📄";
     }else if (computerMove === 2) {
-        computerMove_.innerHTML = "Computer played ✂️!";
+        computerMove_.innerHTML = "计算机出✂️";
     }
 
 }
@@ -54,39 +60,39 @@ function getWinner(){
     let result = document.getElementById("result");
     let scores = document.getElementById("scores");
     if (playerMove === computerMove){
-        result.innerHTML = "Tie!"
+        result.innerHTML = "双方平手!"
         result.style.color = "blue"
     }else if (playerMove === 0 && computerMove === 1){
-        result.innerHTML = "Computer wins!"
+        result.innerHTML = "计算机获胜!"
         result.style.color = "red"
-        scores.innerHTML = "Scores: Player "+ playerScore+"-"+ ++computerScore +" Computer";
+        scores.innerHTML = "当前比分: 玩家 "+ playerScore+"-"+ ++computerScore +" 计算机";
     }else if (playerMove === 0 && computerMove === 2){
-        result.innerHTML = "Player wins!"
+        result.innerHTML = "玩家获胜!"
         result.style.color = "green"
-        scores.innerHTML = "Scores: Player "+ ++playerScore+"-"+computerScore +" Computer";
+        scores.innerHTML = "当前比分: 玩家 "+ ++playerScore+"-"+computerScore +" 计算机";
     }else if (playerMove === 1 && computerMove === 0){
-        result.innerHTML = "Player wins!"
+        result.innerHTML = "玩家获胜!"
         result.style.color = "green"
-        scores.innerHTML = "Scores: Player "+ ++playerScore+"-"+computerScore +" Computer";
+        scores.innerHTML = "当前比分: 玩家 "+ ++playerScore+"-"+computerScore +" 计算机";
     }else if (playerMove === 1 && computerMove === 2){
-        result.innerHTML = "Computer wins!"
+        result.innerHTML = "计算机获胜!"
         result.style.color = "red"
-        scores.innerHTML = "Scores: Player "+ playerScore+"-"+ ++computerScore +" Computer";
+        scores.innerHTML = "当前比分: 玩家 "+ playerScore+"-"+ ++computerScore +" 计算机";
     }else if (playerMove === 2 && computerMove === 0){
-        result.innerHTML = "Computer wins!"
+        result.innerHTML = "计算机获胜!"
         result.style.color = "red"
-        scores.innerHTML = "Scores: Player "+ playerScore+"-"+ ++computerScore +" Computer";
+        scores.innerHTML = "当前比分: 玩家 "+ playerScore+"-"+ ++computerScore +" 计算机";
     }else if (playerMove === 2 && computerMove === 1){
-        result.innerHTML = "Player wins!"
+        result.innerHTML = "玩家获胜!"
         result.style.color = "green"
-        scores.innerHTML = "Scores: Player "+ ++playerScore+"-"+computerScore +" Computer";
+        scores.innerHTML = "当前比分: 玩家 "+ ++playerScore+"-"+computerScore +" 计算机";
     }
 }
 
 function resetScores(){
     playerScore = 0;
     computerScore = 0;
-    scores.innerHTML = "Scores: Player 0-0 Computer";
+    scores.innerHTML = "当前比分: 玩家 0-0 计算机";
     document.getElementById("result").innerHTML = "";
     document.getElementById("computermove").innerHTML = "";
 }
@@ -95,15 +101,18 @@ function resetScores(){
 </head>
 <body>
 <div id="gamecontainer">
-<h1>Rock Paper Scissors</h1>
-<p>Play rock paper scissors against computer.</p>
-<button class="g1" onclick="playerPlay(0)">🪨</button>
-<button class="g1" onclick="playerPlay(1)">📄</button>
-<button class="g1" onclick="playerPlay(2)">✂️</button>
-<p id="scores">Scores: Player 0-0 Computer</p>
-<p id="computermove"></p>
-<p id="result"></p>
-<button class="g2" onclick="resetScores()">Reset scores</button>
+<h1>剪刀石头布</h1>
+<button class="g1" onclick="playerPlay(0)">🪨石头</button>
+<button class="g1" onclick="playerPlay(1)">📄纸</button>
+<button class="g1" onclick="playerPlay(2)">✂️剪刀</button>
+    <br>
+    <br>
+    <div id="infopanel">
+        <p id="scores">当前比分: 玩家 0-0 计算机</p>
+        <p id="computermove"></p>
+        <p id="result"></p>
+        <button class="g2" onclick="resetScores()">重置比分</button>
+    </div>
 </div>
 </body>
 </html>

@@ -10,18 +10,28 @@
             text-align: center;
             place-items: center;
         }
+        #infopanel{
+            background-color: #7caef1;
+            width: 25%;
+            border: 3px solid black;
+        }
         #board{
             background-color: darkblue;
+            border: 3px solid black;
         }
         h1{
             font-size: 50px;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
         .g1{
-            height: 75px;
+            height: 50px;
             font-size: 25px;
         }
         p{
             font-size: 20px;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
         td{
             border: 10px solid darkblue;
@@ -95,7 +105,7 @@
 
         function alternateTurns(){
             turn = (turn + 1) % 2;
-            document.getElementById("turn").innerHTML = "Player "+turnToSymbol(turn)+"'s turn";
+            document.getElementById("turn").innerHTML = "轮到"+turnToSymbol(turn)+"了";
         }
 
         function restart(){
@@ -108,12 +118,12 @@
             turn = 0;
             finished = false;
             document.getElementById("winner").innerHTML = "";
-            document.getElementById("turn").innerHTML = "Player 🔴's turn";
+            document.getElementById("turn").innerHTML = "轮到🔴了";
         }
 
         function cleanScores(){
             scores = [0,0];
-            document.getElementById("scores").innerHTML = "Scores:🔴 0-0 🟡"
+            document.getElementById("scores").innerHTML = "当前比分:🔴 0-0 🟡"
         }
 
         function areEqual(cell0,cell1,cell2,cell3){
@@ -178,22 +188,26 @@
         }
 
         function endGame(){
-            document.getElementById("winner").innerHTML = "Player "+turnToSymbol(turn)+" has won!"
+            document.getElementById("winner").innerHTML = turnToSymbol(turn)+"赢了!"
             scores[turn]++;
-            document.getElementById("scores").innerHTML = "Scores:🔴 "+scores[0]+"-"+scores[1]+" 🟡"
+            document.getElementById("scores").innerHTML = "当前比分:🔴 "+scores[0]+"-"+scores[1]+" 🟡"
             finished = true;
         }
     </script>
 </head>
 <body onload="generateBoard()">
 <div id="fourinarowcontainer">
-    <h1>4 In A Row</h1>
+    <h1>重力四子棋</h1>
     <table id="board"></table>
-    <p id="turn">Player 🔴's turn</p>
-    <p id="scores">Scores:🔴 0-0 🟡</p>
-    <p id="winner"></p>
-    <button class = "g1" onclick="restart()">Restart</button>
-    <button class = "g1" onclick="cleanScores()">Reset Scores</button>
+    <br>
+    <div id="infopanel">
+        <p id="turn">轮到🔴了</p>
+        <p id="scores">当前比分:🔴 0-0 🟡</p>
+        <p id="winner"></p>
+        <button class = "g1" onclick="restart()">新一局</button>
+        <button class = "g1" onclick="cleanScores()">重置比分</button>
+    </div>
+
 </div>
 
 

@@ -10,8 +10,14 @@
             text-align: center;
             place-items: center;
         }
+        #infopanel{
+            background-color: #f1b37a;
+            width: 25%;
+            border: 2px solid black;
+        }
         #board{
             background-color: saddlebrown;
+            border: 2px solid black;
         }
         h1{
             font-size: 50px;
@@ -23,8 +29,8 @@
         }
         p{
             font-size: 20px;
-            margin-top: 5px;
-            margin-bottom: 5px;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
         td{
             border: 2px solid saddlebrown;
@@ -189,11 +195,17 @@
 <div id="gomokucontainer">
 <h1>五子棋</h1>
 <table id="board"></table>
-<p id="turn">轮到⚫了</p>
-<p id="scores">当前比分:⚫ 0-0 ⚪️</p>
-<p id="winner"></p>
-<button class = "g1" onclick="restart()">新一局</button>
-<button class = "g1" onclick="cleanScores()">重置比分</button>
+<br>
+<div id="infopanel">
+    <p id="turn">轮到⚫了</p>
+    <p id="scores">当前比分:⚫ 0-0 ⚪️</p>
+    <p id="winner"></p>
+    <button class = "g1" onclick="restart()">新一局</button>
+    <button class = "g1" onclick="cleanScores()">重置比分</button>
+</div>
+
+</div>
+
 </div>
 
 

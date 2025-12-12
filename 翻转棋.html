@@ -558,6 +558,11 @@
             text-align: center;
             place-items: center;
         }
+        #infopanel{
+            background-color: #23d623;
+            border: 2px solid black;
+            width: 25%;
+        }
         h1{
             font-size: 50px;
             margin-top: 2px;
@@ -571,6 +576,7 @@
         }
         #board{
             background-color: black;
+            border: 2px solid black;
         }
         td{
             border: 2px solid black;
@@ -596,12 +602,15 @@
 <div id="gamecontainer">
     <h1>翻转棋</h1>
     <table id="board"></table>
-    <p id="turn">轮到⚫了</p>
-    <p id="piececount">当前棋子数量:⚫ 2-2 ⚪️</p>
-    <p id="scores">当前比分:⚫ 0-0 ⚪️</p>
-    <p id="winner"></p>
-    <button class = "g1" onclick="restart()">新一局</button>
-    <button class = "g1" onclick="clearScores()">重置比分</button>
+    <br>
+    <div id="infopanel">
+        <p id="turn">轮到⚫了</p>
+        <p id="piececount">当前棋子数量:⚫ 2-2 ⚪️</p>
+        <p id="scores">当前比分:⚫ 0-0 ⚪️</p>
+        <p id="winner"></p>
+        <button class = "g1" onclick="restart()">新一局</button>
+        <button class = "g1" onclick="clearScores()">重置比分</button>
+    </div>
 </div>
 
 </body>

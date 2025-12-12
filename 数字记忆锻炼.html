@@ -33,7 +33,7 @@
         }
 
         function hideTargetNum(){
-            document.getElementById("targetnumfield").innerHTML = "";
+            document.getElementById("targetnumfield").innerHTML = "---";
         }
 
 
@@ -91,6 +91,12 @@
         #gamecontainer{
             background-color: lightgray;
             text-align: center;
+            place-items: center;
+        }
+        #infopanel{
+            background-color: #aeadad;
+            width: 25%;
+            border: 2px solid black;
         }
 
         #check{
@@ -115,6 +121,8 @@
 
         p{
             font-size: 30px;
+            margin-top: 2px;
+            margin-bottom: 2px;
         }
 
         .g1{
@@ -131,11 +139,16 @@
 <body onload="setTargetNum()">
 <div id="gamecontainer">
     <h1>数字记忆锻炼</h1>
-    <p id="level">关卡1</p>
-    <p id="timer">剩余记忆时间:</p>
-    <p id="targetnumfield"></p>
+    <div id="infopanel">
+        <p id="level">关卡1</p>
+        <p id="timer">剩余记忆时间:</p>
+        <p id="targetnumfield"></p>
+    </div>
+    <br>
     <input type="number" class="g2" id="input" disabled>
     <button class="g1" id="check" onclick="check()" disabled>提交答案</button>
+    <br>
+    <br>
     <p id="gameover"></p>
     <button class="g1" id="restart" onclick="restart()">重新开始</button>
 </div>
