@@ -12,8 +12,8 @@
         }
         #infopanel{
             background-color: #f1b37a;
-            width: 25%;
             border: 2px solid black;
+            width: 500px;
         }
         #board{
             background-color: saddlebrown;
@@ -28,23 +28,28 @@
             font-size: 25px
         }
         p{
-            font-size: 20px;
+            font-size: 25px;
             margin-top: 2px;
             margin-bottom: 2px;
         }
         td{
             border: 2px solid saddlebrown;
-            font-size: 25px;
-            width: 35px;
-            height: 35px;
+            font-size: 22px;
+            width: 30px;
+            height: 30px;
             text-align: center;
             background-color: orange;
+        }
+        .newmove{
+            background-color: red;
         }
     </style>
     <script>
         var turn = 0;
         var finished = false;
         var scores = [0,0];
+        var lastMoveRow;
+        var lastMoveCol;
 
         function turnToSymbol(turn){
             if(turn === 0){
@@ -71,16 +76,32 @@
             board.innerHTML = boardHtml;
         }
 
+        function markLastMove(row,col){
+            let cell = document.getElementById(row+"-"+col);
+            cell.classList.add("newmove");
+            lastMoveRow = row;
+            lastMoveCol = col;
+        }
+
+        function unmarkLastMove(){
+            let cell = document.getElementById(lastMoveRow+"-"+lastMoveCol);
+            if(cell !== null) {
+                cell.classList.remove("newmove");
+            }
+        }
+
         function placePiece(row,col){
             if(!finished) {
                 let cell = document.getElementById(row + "-" + col)
                 if (cell.innerText === "") {
+                    unmarkLastMove();
                     if (turn === 0) {
                         cell.innerHTML = "⚫";
                     } else {
                         cell.innerHTML = "⚪️";
                     }
                     checkWinner();
+                    markLastMove(row,col);
                     if (!finished) {
                         alternateTurns()
                     }
@@ -100,12 +121,7 @@
         }
 
         function restart(){
-            for (let i = 0; i < 15; i++) {
-                for (let j = 0; j < 15; j++){
-                    let cell = document.getElementById(i+"-"+j);
-                    cell.innerHTML = "";
-                }
-            }
+            generateBoard();
             turn = 0;
             finished = false;
             document.getElementById("winner").innerHTML = "";
@@ -191,7 +207,6 @@
     </script>
 </head>
 <body onload="generateBoard()">
-</div>
 <div id="gomokucontainer">
 <h1>五子棋</h1>
 <table id="board"></table>
