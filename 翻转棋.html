@@ -11,6 +11,7 @@
         var whiteScore = 0;
         var lastMoveRow;
         var lastMoveCol;
+        var size = 8;
 
         function mapPlayerTurnToPiece(turn){
             if(turn===0){
@@ -30,13 +31,26 @@
             }
         }
 
+        function setBoardSize(){
+            let newSize = document.getElementById("size").value;
+            if(newSize<4){
+                newSize = 4;
+                document.getElementById("size").value = 4;
+            }
+            if(newSize>40){
+                newSize = 40;
+                document.getElementById("size").value = 40;
+            }
+            size = newSize;
+            generateBoard();
+        }
 
         function generateBoard(){
-            let board = document.getElementById("board")
+            let board = document.getElementById("board");
             boardHtml = "";
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < size; i++) {
                 boardHtml += "<tr>";
-                for (let j = 0; j < 8; j++){
+                for (let j = 0; j < size; j++){
                     let cellStartTag = "<td";
                     let cellOnClickStr = " onclick=placePiece("+i+","+j+")"
                     let cellId = " id="+i+"-"+j+">";
@@ -46,19 +60,17 @@
                 boardHtml += "</tr>";
             }
             board.innerHTML = boardHtml;
-            document.getElementById("2-3").classList.add("valid");
-            document.getElementById("3-2").classList.add("valid");
-            document.getElementById("3-3").innerHTML = "⚪️";
-            document.getElementById("3-4").innerHTML = "⚫";
-            document.getElementById("4-3").innerHTML = "⚫";
-            document.getElementById("4-4").innerHTML = "⚪️";
-            document.getElementById("4-5").classList.add("valid");
-            document.getElementById("5-4").classList.add("valid");
+            let center = Math.floor(size/2);
+            document.getElementById((center-1)+"-"+(center-1)).innerHTML = "⚪️";
+            document.getElementById((center-1)+"-"+center).innerHTML = "⚫";
+            document.getElementById((center)+"-"+(center-1)).innerHTML = "⚫";
+            document.getElementById((center)+"-"+(center)).innerHTML = "⚪️";
+            markPossibleMoves(turn);
         }
 
         function noMoves(){
-            for(let i = 0; i < 8; i++){
-                for (let j = 0; j < 8; j++){
+            for(let i = 0; i < size; i++){
+                for (let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(cell.classList.contains("valid")){
                         return false;
@@ -71,8 +83,8 @@
         function countPieces(){
             blackCount = 0;
             whiteCount = 0;
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(cell.innerHTML==="⚫"){
                         blackCount++;
@@ -85,8 +97,8 @@
         }
 
         function markPossibleMoves(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     cell.classList.remove("valid");
                 }
@@ -102,8 +114,8 @@
         }
 
         function markUp(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i-1;
@@ -128,8 +140,8 @@
         }
 
         function markUpLeft(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i-1;
@@ -156,13 +168,13 @@
         }
 
         function markUpRight(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i-1;
                         let col = j+1;
-                        while(row >= 0 && col < 8){
+                        while(row >= 0 && col < size){
                             let cell2 = document.getElementById(row+"-"+col);
                             if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
@@ -184,13 +196,13 @@
         }
 
         function markDown(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i+1;
                         let col = j;
-                        while(row < 8){
+                        while(row < size){
                             let cell2 = document.getElementById(row+"-"+col);
                             if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
@@ -211,13 +223,13 @@
         }
 
         function markDownLeft(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i+1;
                         let col = j-1;
-                        while(row < 8 && col >= 0){
+                        while(row < size && col >= 0){
                             let cell2 = document.getElementById(row+"-"+col);
                             if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
@@ -239,13 +251,13 @@
         }
 
         function markDownRight(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i+1;
                         let col = j+1;
-                        while(row < 8 && col < 8){
+                        while(row < size && col < size){
                             let cell2 = document.getElementById(row+"-"+col);
                             if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
@@ -267,8 +279,8 @@
         }
 
         function markLeft(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i;
@@ -293,13 +305,13 @@
         }
 
         function markRight(turn){
-            for(let i=0; i<8; i++){
-                for(let j = 0; j < 8; j++){
+            for(let i=0; i<size; i++){
+                for(let j = 0; j < size; j++){
                     let cell = document.getElementById(i+"-"+j);
                     if(mapPieceToPlayerTurn(cell.innerHTML)===turn && cell.innerHTML !== ""){
                         let row = i;
                         let col = j+1;
-                        while(col < 8){
+                        while(col < size){
                             let cell2 = document.getElementById(row+"-"+col);
                             if(mapPieceToPlayerTurn(cell2.innerHTML)===turn && cell2.innerHTML !== ""){
                                 break;
@@ -373,7 +385,7 @@
         }
 
         function flipUpRight(turn,row,col){
-            if(row===0 || col===7 || (row>0 && col<7 && document.getElementById((row-1) + "-" + (col+1)).innerHTML==="")){
+            if(row===0 || col===size-1 || (row>0 && col<size-1 && document.getElementById((row-1) + "-" + (col+1)).innerHTML==="")){
                 return;
             }
             let cell = document.getElementById(row+"-"+col);
@@ -396,7 +408,7 @@
         }
 
         function flipDown(turn,row,col){
-            if(row===7 || (row<7 && document.getElementById((row+1) + "-" + col).innerHTML==="")){
+            if(row===size-1 || (row<size-1 && document.getElementById((row+1) + "-" + col).innerHTML==="")){
                 return;
             }
             let cell = document.getElementById(row + "-" + col);
@@ -416,7 +428,7 @@
         }
 
         function flipDownLeft(turn,row,col){
-            if(row===7 || col===0 || (row<7 && col>0 && document.getElementById((row+1) + "-" + (col-1)).innerHTML==="")){
+            if(row===size-1 || col===0 || (row<size-1 && col>0 && document.getElementById((row+1) + "-" + (col-1)).innerHTML==="")){
                 return;
             }
             let cell = document.getElementById(row + "-" + col);
@@ -439,7 +451,7 @@
         }
 
         function flipDownRight(turn,row,col){
-            if(row===7 || col===7 || (row<7 && col<7 && document.getElementById((row+1) + "-" + (col+1)).innerHTML==="")){
+            if(row===size-1 || col===size-1 || (row<size-1 && col<size-1 && document.getElementById((row+1) + "-" + (col+1)).innerHTML==="")){
                 return;
             }
 
@@ -483,7 +495,7 @@
         }
 
         function flipRight(turn,row,col){
-            if(col===7 || (col<7 && document.getElementById(row + "-" + (col+1)).innerHTML==="")){
+            if(col===size-1 || (col<size-1 && document.getElementById(row + "-" + (col+1)).innerHTML==="")){
                 return;
             }
             let cell = document.getElementById(row + "-" + col);
@@ -549,8 +561,8 @@
         }
 
         function restart(){
-            generateBoard()
             turn = 0;
+            generateBoard();
             document.getElementById("turn").innerHTML = "轮到⚫了";
             document.getElementById("piececount").innerHTML = "当前棋子数量:⚫ 2-2 ⚪️";
             document.getElementById("winner").innerHTML = "";
@@ -576,10 +588,19 @@
             text-align: center;
             place-items: center;
         }
+
+        #utilities{
+            display: flex;
+        }
         #infopanel{
             background-color: #23d623;
-            border: 2px solid black;
-            width: 500px;
+            border: 3px solid black;
+            width: 350px;
+        }
+        #boardsettings{
+            background-color: #23d623;
+            border: 3px solid black;
+            width: 350px;
         }
         h1{
             font-size: 50px;
@@ -588,7 +609,7 @@
         }
 
         p{
-            font-size: 30px;
+            font-size: 20px;
             margin-top: 2px;
             margin-bottom: 2px;
         }
@@ -598,7 +619,7 @@
         }
         td{
             border: 2px solid black;
-            font-size: 36px;
+            font-size: 35px;
             width: 50px;
             height: 50px;
             text-align: center;
@@ -613,6 +634,11 @@
         p{
             font-size: 25px;
         }
+        .input{
+            width: 100px;
+            height: 25px;
+            font-size: 25px;
+        }
         .g1{
             height: 40px;
             font-size: 25px
@@ -622,15 +648,22 @@
 <body onload="generateBoard()">
 <div id="gamecontainer">
     <h1>翻转棋</h1>
+    <p>如果棋盘显示不佳建议缩小网页</p>
     <table id="board"></table>
     <br>
-    <div id="infopanel">
-        <p id="turn">轮到⚫了</p>
-        <p id="piececount">当前棋子数量:⚫ 2-2 ⚪️</p>
-        <p id="scores">当前比分:⚫ 0-0 ⚪️</p>
-        <p id="winner"></p>
-        <button class = "g1" onclick="restart()">新一局</button>
-        <button class = "g1" onclick="clearScores()">重置比分</button>
+    <div id="utilities">
+        <div id="infopanel">
+            <p id="turn">轮到⚫了</p>
+            <p id="piececount">当前棋子数量:⚫ 2-2 ⚪️</p>
+            <p id="scores">当前比分:⚫ 0-0 ⚪️</p>
+            <p id="winner"></p>
+            <button class = "g1" onclick="restart()">新一局</button>
+            <button class = "g1" onclick="clearScores()">重置比分</button>
+        </div>
+        <div id="boardsettings">
+            <p>调整棋盘大小</p>
+            <p>棋盘大小(4-40)<input type="number" value="8" class="input" id="size"> <button class="g1" onclick="setBoardSize()">调整</button></p>
+        </div>
     </div>
 </div>
 

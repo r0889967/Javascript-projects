@@ -10,10 +10,18 @@
             text-align: center;
             place-items: center;
         }
+        #utilities{
+            display: flex;
+        }
         #infopanel{
             background-color: #7caef1;
             border: 3px solid black;
-            width: 500px;
+            width: 350px;
+        }
+        #boardsettings{
+            background-color: #7caef1;
+            border: 3px solid black;
+            width: 350px;
         }
         #board{
             background-color: darkblue;
@@ -28,17 +36,22 @@
             height: 50px;
             font-size: 25px;
         }
-        p{
+        .input{
+            width: 100px;
+            height: 25px;
             font-size: 25px;
+        }
+        p{
+            font-size: 20px;
             margin-top: 2px;
             margin-bottom: 2px;
         }
         td{
             border: 10px solid darkblue;
             border-radius: 50px;
-            font-size: 43px;
-            width: 60px;
-            height: 60px;
+            font-size: 35px;
+            width: 50px;
+            height: 50px;
             text-align: center;
             background-color: blue;
         }
@@ -47,6 +60,9 @@
         var turn = 0;
         var finished = false;
         var scores = [0,0];
+        var rows = 6;
+        var cols = 7;
+
 
         function turnToSymbol(turn){
             if(turn === 0){
@@ -56,12 +72,45 @@
             }
         }
 
+        function setRowsCount(){
+            let rowsCount = document.getElementById("rowscount").value;
+            if(rowsCount<4){
+                rowsCount = 4;
+                document.getElementById("rowscount").value = 4;
+            }
+            if(rowsCount>30){
+                rowsCount = 30;
+                document.getElementById("rowscount").value = 30;
+            }
+            rows = rowsCount;
+            generateBoard();
+        }
+
+        function setColsCount(){
+            let colsCount = document.getElementById("colscount").value;
+            if(colsCount<4){
+                colsCount = 4;
+                document.getElementById("colscount").value = 4;
+            }
+            if(colsCount>80){
+                colsCount = 80;
+                document.getElementById("colscount").value = 80;
+            }
+            cols = colsCount;
+            generateBoard();
+        }
+
+        function setBoardDimensions(){
+            setRowsCount();
+            setColsCount();
+        }
+
         function generateBoard(){
-            let board = document.getElementById("board")
+            let board = document.getElementById("board");
             boardHtml = "";
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < rows; i++) {
                 boardHtml += "<tr>";
-                for (let j = 0; j < 7; j++){
+                for (let j = 0; j < cols; j++){
                     let cellStartTag = "<td";
                     let cellOnClickStr = " onclick=placePiece("+j+")"
                     let cellId = " id="+i+"-"+j+">";
@@ -77,7 +126,7 @@
             if(!finished) {
                 let topCell = document.getElementById(0 + "-" + col)
                 if (topCell.innerText === "") {
-                    let row = 5;
+                    let row = rows-1;
                     let targetCell = document.getElementById(row + "-" + col);
                     while(targetCell.innerText !== ""){
                         row--;
@@ -109,8 +158,8 @@
         }
 
         function restart(){
-            for (let i = 0; i < 6; i++) {
-                for (let j = 0; j < 7; j++){
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++){
                     let cell = document.getElementById(i+"-"+j);
                     cell.innerHTML = "";
                 }
@@ -132,8 +181,8 @@
         }
 
         function checkH(){
-            for (let i = 0; i < 6; i++) {
-                for (let j = 0; j < 4; j++){
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols-3; j++){
                     let cell0 = document.getElementById(i+"-"+j);
                     let cell1 = document.getElementById(i+"-"+(j+1));
                     let cell2 = document.getElementById(i+"-"+(j+2));
@@ -146,8 +195,8 @@
         }
 
         function checkV(){
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 7; j++){
+            for (let i = 0; i < rows-3; i++) {
+                for (let j = 0; j < cols; j++){
                     let cell0 = document.getElementById(i+"-"+j);
                     let cell1 = document.getElementById((i+1)+"-"+j);
                     let cell2 = document.getElementById((i+2)+"-"+j);
@@ -160,8 +209,8 @@
         }
 
         function checkD1(){
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 4; j++){
+            for (let i = 0; i < rows-3; i++) {
+                for (let j = 0; j < cols-3; j++){
                     let cell0 = document.getElementById(i+"-"+j);
                     let cell1 = document.getElementById((i+1)+"-"+(j+1));
                     let cell2 = document.getElementById((i+2)+"-"+(j+2));
@@ -174,8 +223,8 @@
         }
 
         function checkD2(){
-            for (let i = 0; i < 3; i++) {
-                for (let j = 3; j < 7; j++){
+            for (let i = 0; i < rows-3; i++) {
+                for (let j = 3; j < cols; j++){
                     let cell0 = document.getElementById(i+"-"+j);
                     let cell1 = document.getElementById((i+1)+"-"+(j-1));
                     let cell2 = document.getElementById((i+2)+"-"+(j-2));
@@ -198,16 +247,23 @@
 <body onload="generateBoard()">
 <div id="fourinarowcontainer">
     <h1>重力四子棋</h1>
+    <p>如果棋盘显示不佳建议缩小网页</p>
     <table id="board"></table>
     <br>
-    <div id="infopanel">
-        <p id="turn">轮到🔴了</p>
-        <p id="scores">当前比分:🔴 0-0 🟡</p>
-        <p id="winner"></p>
-        <button class = "g1" onclick="restart()">新一局</button>
-        <button class = "g1" onclick="cleanScores()">重置比分</button>
+    <div id="utilities">
+        <div id="infopanel">
+            <p id="turn">轮到🔴了</p>
+            <p id="scores">当前比分:🔴 0-0 🟡</p>
+            <p id="winner"></p>
+            <button class = "g1" onclick="restart()">新一局</button>
+            <button class = "g1" onclick="cleanScores()">重置比分</button>
+        </div>
+        <div id="boardsettings">
+            <p>调整棋盘尺寸</p>
+            <p>行数(4-30)<input type="number" value="6" class="input" id="rowscount"> <button class="g1" onclick="setBoardDimensions()">调整</button></p>
+            <p>列数(4-80)<input type="number" value="7" class="input" id="colscount"> <button class="g1" onclick="setBoardDimensions()">调整</button></p>
+        </div>
     </div>
-
 </div>
 
 
