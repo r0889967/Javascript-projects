@@ -1,10 +1,10 @@
-export const Exercises = [];
+const Exercises = [];
 
-export const abstractionExercises = [];
-export const decompositionExercises = [];
-export const patternExercises = [];
-export const algorithmExercises = [];
-export const IntegratedExercises = [];
+const abstractionExercises = [];
+const decompositionExercises = [];
+const patternExercises = [];
+const algorithmExercises = [];
+const IntegratedExercises = [];
 
 Exercises.push(abstractionExercises);
 Exercises.push(decompositionExercises);

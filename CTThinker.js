@@ -1,7 +1,9 @@
-import {Exercises} from "./ExercisesDatabase.js";
 
-var selectedModuleIdx;
-var selectedExerciseIdx;
+
+var selectedModuleId;
+var selectedExerciseId;
+var progress = 1;
+var chosenExercisesCount = 5;
 var chosenExercises = [];
 
 function loadMainMenu(){
@@ -26,20 +28,41 @@ function getElem(id){
     return document.getElementById(id);
 }
 
+function toNextLevel(){
+    progress++;
+    loadLevelContents(selectedModuleId,progress);
+}
+
 
 function checkAnswer(input){
-    let exercise = Exercises[selectedModuleIdx][selectedExerciseIdx];
+    let exercise = chosenExercises[progress-1];
     if(input===exercise.correctAnswer){
-        getElem("correctanswer").innerHTML = "The answer is correct!";
+        getElem("correctanswer").innerHTML = "The answer is correct!"+
+        `<button class="button3" onclick="toNextLevel()">Next Level</button>`;
     }else{
         getElem("correctanswer").innerHTML = "The answer is incorrect!";
     }
 }
 
-function loadLevelContents(moduleIndex,index){
-    let exercise = Exercises[moduleIndex][index];
-    selectedModuleIdx = moduleIndex;
-    selectedExerciseIdx = index;
+function pickExercises(midx){
+    let module = Exercises[midx];
+    let pickedExercises = [];
+    while(pickedExercises.length<chosenExercisesCount){
+        let eidx = Math.floor(Math.random()*module.length);
+        let exercise = Exercises[midx][eidx];
+        if(!pickedExercises.includes(exercise)){
+            pickedExercises.push(module[eidx]);
+        }else{
+            eidx = Math.floor(Math.random()*module.length);
+        }
+    }
+    chosenExercises = pickedExercises;
+}
+
+function loadLevelContents(midx,progress){
+    let exercise = chosenExercises[progress-1];
+    selectedModuleId = midx;
+    selectedExerciseId = progress-1;
     let level = getElem("level");
     let html = "";
     if(exercise != null){
@@ -51,13 +74,13 @@ function loadLevelContents(moduleIndex,index){
         html += "<br>";
         if(exercise.type==='B') {
             html += `<p>Please enter your answer:<input class="input1" id="inputprompt" 
-><button class="checkbutton" onclick="checkAnswer(getElem('inputprompt').value)">Check</button></p>`;
+><button class="button3" onclick="checkAnswer(getElem('inputprompt').value)">Check</button></p>`;
         }
         html += "<br>";
         html += `<p id="correctanswer"></p>`;
         html += "<br>";
         html += "<br>";
-        html += "<br>";
+        html += `<p>${progress}/${chosenExercisesCount}</p>`;
         html += "<button onclick=\"returnToLevelSelection()\" class=\"button1\">Level Selection</button>";
         level.innerHTML = html;
     }
@@ -87,7 +110,9 @@ function loadLevelSelection(index){
     html += "<br>";
     html += "<br>";
     html += "<p>Module 3: Pattern recognization</p>";
-    html += `<button class="button1" onclick="let index=Math.floor(Math.random()*Exercises[2].length);loadLevelContents(2,index)">Start Pattern Exercises</button>`;
+    html += `<button class="button1" onclick="
+pickExercises(2);
+loadLevelContents(2,progress)">Start Pattern Exercises</button>`;
 
     html += "<br>";
     html += "<br>";
@@ -148,6 +173,7 @@ window.loadLevelSelection = loadLevelSelection;
 window.returnToMainMenu = returnToMainMenu;
 window.returnToLevelSelection = returnToLevelSelection;
 window.checkAnswer = checkAnswer;
+window.toNextLevel = toNextLevel;
 window.getElem = getElem;
 window.Exercises= Exercises;
 
