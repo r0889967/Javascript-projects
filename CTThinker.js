@@ -1,7 +1,8 @@
-import {abstractionExercises,patternExercises} from "./ExercisesDatabase.js";
+import {Exercises} from "./ExercisesDatabase.js";
 
-var selectedAbstractionExerciseIdx;
-var selectedPatternExerciseIdx;
+var selectedModuleIdx;
+var selectedExerciseIdx;
+var chosenExercises = [];
 
 function loadMainMenu(){
     let mainmenu = getElem("mainmenu");
@@ -27,7 +28,7 @@ function getElem(id){
 
 
 function checkAnswer(input){
-    let exercise = patternExercises[selectedPatternExerciseIdx];
+    let exercise = Exercises[selectedModuleIdx][selectedExerciseIdx];
     if(input===exercise.correctAnswer){
         getElem("correctanswer").innerHTML = "The answer is correct!";
     }else{
@@ -35,9 +36,10 @@ function checkAnswer(input){
     }
 }
 
-function loadLevelContents(index){
-    let exercise = patternExercises[index];
-    selectedPatternExerciseIdx = index;
+function loadLevelContents(moduleIndex,index){
+    let exercise = Exercises[moduleIndex][index];
+    selectedModuleIdx = moduleIndex;
+    selectedExerciseIdx = index;
     let level = getElem("level");
     let html = "";
     if(exercise != null){
@@ -47,8 +49,10 @@ function loadLevelContents(index){
             html += `<p>${line}</p>`;
         }
         html += "<br>";
-        html += `<p>Please enter your answer:<input class="input1" id="inputprompt" 
+        if(exercise.type==='B') {
+            html += `<p>Please enter your answer:<input class="input1" id="inputprompt" 
 ><button class="checkbutton" onclick="checkAnswer(getElem('inputprompt').value)">Check</button></p>`;
+        }
         html += "<br>";
         html += `<p id="correctanswer"></p>`;
         html += "<br>";
@@ -83,7 +87,7 @@ function loadLevelSelection(index){
     html += "<br>";
     html += "<br>";
     html += "<p>Module 3: Pattern recognization</p>";
-    html += `<button class="button1" onclick="let index=Math.floor(Math.random()*patternExercises.length);loadLevelContents(index)">Start Pattern Exercises</button>`;
+    html += `<button class="button1" onclick="let index=Math.floor(Math.random()*Exercises[2].length);loadLevelContents(2,index)">Start Pattern Exercises</button>`;
 
     html += "<br>";
     html += "<br>";
@@ -145,6 +149,6 @@ window.returnToMainMenu = returnToMainMenu;
 window.returnToLevelSelection = returnToLevelSelection;
 window.checkAnswer = checkAnswer;
 window.getElem = getElem;
-window.patternExercises= patternExercises;
-window.abstractionExercises = abstractionExercises;
+window.Exercises= Exercises;
+
 

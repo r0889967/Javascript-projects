@@ -1,5 +1,16 @@
-export const patternExercises = [];
+export const Exercises = [];
+
 export const abstractionExercises = [];
+export const decompositionExercises = [];
+export const patternExercises = [];
+export const algorithmExercises = [];
+export const IntegratedExercises = [];
+
+Exercises.push(abstractionExercises);
+Exercises.push(decompositionExercises);
+Exercises.push(patternExercises);
+Exercises.push(algorithmExercises);
+Exercises.push(IntegratedExercises);
 
 
 
