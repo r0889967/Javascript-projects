@@ -37,7 +37,7 @@
             font-size: 25px;
         }
         .input{
-            width: 100px;
+            width: 50px;
             height: 25px;
             font-size: 25px;
         }
@@ -55,6 +55,9 @@
             text-align: center;
             background-color: blue;
         }
+        .newmove{
+            background-color: white;
+        }
     </style>
     <script>
         var turn = 0;
@@ -62,9 +65,11 @@
         var scores = [0,0];
         var rows = 6;
         var cols = 7;
+        var lastMoveRow;
+        var lastMoveCol;
 
 
-        function turnToSymbol(turn){
+        function mapPlayerTurnToPiece(turn){
             if(turn === 0){
                 return "🔴";
             }else{
@@ -72,32 +77,36 @@
             }
         }
 
+        function getElem(id){
+            return document.getElementById(id);
+        }
+
         function setRowsCount(){
-            let rowsCount = document.getElementById("rowscount").value;
+            let rowsCount = getElem("rowscount").value;
             if(rowsCount<4){
                 rowsCount = 4;
-                document.getElementById("rowscount").value = 4;
+                getElem("rowscount").value = 4;
             }
             if(rowsCount>30){
                 rowsCount = 30;
-                document.getElementById("rowscount").value = 30;
+                getElem("rowscount").value = 30;
             }
             rows = rowsCount;
-            generateBoard();
+            initializeBoard();
         }
 
         function setColsCount(){
-            let colsCount = document.getElementById("colscount").value;
+            let colsCount = getElem("colscount").value;
             if(colsCount<4){
                 colsCount = 4;
-                document.getElementById("colscount").value = 4;
+                getElem("colscount").value = 4;
             }
             if(colsCount>80){
                 colsCount = 80;
-                document.getElementById("colscount").value = 80;
+                getElem("colscount").value = 80;
             }
             cols = colsCount;
-            generateBoard();
+            initializeBoard();
         }
 
         function setBoardDimensions(){
@@ -105,14 +114,14 @@
             setColsCount();
         }
 
-        function generateBoard(){
-            let board = document.getElementById("board");
+        function initializeBoard(){
+            let board = getElem("board");
             boardHtml = "";
             for (let i = 0; i < rows; i++) {
                 boardHtml += "<tr>";
                 for (let j = 0; j < cols; j++){
                     let cellStartTag = "<td";
-                    let cellOnClickStr = " onclick=placePiece("+j+")"
+                    let cellOnClickStr = " onclick=play("+j+")"
                     let cellId = " id="+i+"-"+j+">";
                     let cellEndTag = "</td>";
                     boardHtml += cellStartTag + cellOnClickStr + cellId+ cellEndTag;
@@ -122,22 +131,38 @@
             board.innerHTML = boardHtml;
         }
 
-        function placePiece(col){
+        function markLastMove(row,col){
+            let cell = getElem(row+"-"+col);
+            cell.classList.add("newmove");
+            lastMoveRow = row;
+            lastMoveCol = col;
+        }
+
+        function unmarkLastMove(){
+            let cell = getElem(lastMoveRow+"-"+lastMoveCol);
+            if(cell !== null) {
+                cell.classList.remove("newmove");
+            }
+        }
+
+        function placePiece(cell){
+            cell.innerHTML = mapPlayerTurnToPiece(turn)
+        }
+
+        function play(col){
             if(!finished) {
-                let topCell = document.getElementById(0 + "-" + col)
+                let topCell = getElem(0 + "-" + col)
                 if (topCell.innerText === "") {
+                    unmarkLastMove();
                     let row = rows-1;
-                    let targetCell = document.getElementById(row + "-" + col);
+                    let targetCell = getElem(row + "-" + col);
                     while(targetCell.innerText !== ""){
                         row--;
-                        targetCell = document.getElementById(row + "-" + col);
+                        targetCell = getElem(row + "-" + col);
                     }
-                    if (turn === 0) {
-                        targetCell.innerHTML = "🔴";
-                    } else {
-                        targetCell.innerHTML = "🟡";
-                    }
+                    placePiece(targetCell);
                     checkWinner();
+                    markLastMove(row,col);
                     if(!finished){
                         alternateTurns();
                     }
@@ -154,25 +179,20 @@
 
         function alternateTurns(){
             turn = (turn + 1) % 2;
-            document.getElementById("turn").innerHTML = "轮到"+turnToSymbol(turn)+"了";
+            getElem("turn").innerHTML = "轮到"+mapPlayerTurnToPiece(turn)+"了";
         }
 
         function restart(){
-            for (let i = 0; i < rows; i++) {
-                for (let j = 0; j < cols; j++){
-                    let cell = document.getElementById(i+"-"+j);
-                    cell.innerHTML = "";
-                }
-            }
+            initializeBoard();
             turn = 0;
             finished = false;
-            document.getElementById("winner").innerHTML = "";
-            document.getElementById("turn").innerHTML = "轮到🔴了";
+            getElem("winner").innerHTML = "";
+            getElem("turn").innerHTML = "轮到🔴了";
         }
 
         function cleanScores(){
             scores = [0,0];
-            document.getElementById("scores").innerHTML = "当前比分:🔴 0-0 🟡"
+            getElem("scores").innerHTML = "当前比分:🔴 0-0 🟡"
         }
 
         function areEqual(cell0,cell1,cell2,cell3){
@@ -183,10 +203,10 @@
         function checkH(){
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols-3; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById(i+"-"+(j+1));
-                    let cell2 = document.getElementById(i+"-"+(j+2));
-                    let cell3 = document.getElementById(i+"-"+(j+3));
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem(i+"-"+(j+1));
+                    let cell2 = getElem(i+"-"+(j+2));
+                    let cell3 = getElem(i+"-"+(j+3));
                     if(areEqual(cell0,cell1,cell2,cell3)){
                         endGame();
                     }
@@ -197,10 +217,10 @@
         function checkV(){
             for (let i = 0; i < rows-3; i++) {
                 for (let j = 0; j < cols; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById((i+1)+"-"+j);
-                    let cell2 = document.getElementById((i+2)+"-"+j);
-                    let cell3 = document.getElementById((i+3)+"-"+j);
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem((i+1)+"-"+j);
+                    let cell2 = getElem((i+2)+"-"+j);
+                    let cell3 = getElem((i+3)+"-"+j);
                     if(areEqual(cell0,cell1,cell2,cell3)){
                         endGame();
                     }
@@ -211,10 +231,10 @@
         function checkD1(){
             for (let i = 0; i < rows-3; i++) {
                 for (let j = 0; j < cols-3; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById((i+1)+"-"+(j+1));
-                    let cell2 = document.getElementById((i+2)+"-"+(j+2));
-                    let cell3 = document.getElementById((i+3)+"-"+(j+3));
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem((i+1)+"-"+(j+1));
+                    let cell2 = getElem((i+2)+"-"+(j+2));
+                    let cell3 = getElem((i+3)+"-"+(j+3));
                     if(areEqual(cell0,cell1,cell2,cell3)){
                         endGame();
                     }
@@ -225,10 +245,10 @@
         function checkD2(){
             for (let i = 0; i < rows-3; i++) {
                 for (let j = 3; j < cols; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById((i+1)+"-"+(j-1));
-                    let cell2 = document.getElementById((i+2)+"-"+(j-2));
-                    let cell3 = document.getElementById((i+3)+"-"+(j-3));
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem((i+1)+"-"+(j-1));
+                    let cell2 = getElem((i+2)+"-"+(j-2));
+                    let cell3 = getElem((i+3)+"-"+(j-3));
                     if(areEqual(cell0,cell1,cell2,cell3)){
                         endGame();
                     }
@@ -236,15 +256,19 @@
             }
         }
 
-        function endGame(){
-            document.getElementById("winner").innerHTML = turnToSymbol(turn)+"赢了!"
+        function setScore(){
             scores[turn]++;
-            document.getElementById("scores").innerHTML = "当前比分:🔴 "+scores[0]+"-"+scores[1]+" 🟡"
+            getElem("scores").innerHTML = "当前比分:🔴 "+scores[0]+"-"+scores[1]+" 🟡"
+        }
+
+        function endGame(){
+            getElem("winner").innerHTML = mapPlayerTurnToPiece(turn)+"赢了!"
+            setScore();
             finished = true;
         }
     </script>
 </head>
-<body onload="generateBoard()">
+<body onload="initializeBoard()">
 <div id="fourinarowcontainer">
     <h1>重力四子棋</h1>
     <p>如果棋盘显示不佳建议缩小网页</p>

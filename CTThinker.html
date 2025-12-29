@@ -3,103 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CTThinker</title>
-    <script>
-        var chosenLevels = [];
-
-        function loadMainMenu(){
-            let mainmenu = document.getElementById("mainmenu");
-            let html = "";
-            html += "<h1>CTThinker</h1>";
-            html += "<p>A great tool to boost computional thinking</p>";
-            html += "<p>Made by David Jiawei Wang and Senne Bosmans</p>";
-            html += "<br>";
-            html += "<br>";
-            html += "<br>";
-            html += "<button onclick=\"loadLevelSelection()\" class=\"button1\">Start Game</button>";
-            html += "<br/>";
-            html += "<button onclick=\"loadInfo()\" class=\"button1\">About CTThinker</button>";
-            mainmenu.innerHTML = html;
-        }
-
-        function loadLevelContents(index){
-
-        }
-
-        function loadLevelScreen(){
-
-        }
-
-        function loadLevelSelection(){
-            document.getElementById("mainmenu").innerHTML = "";
-            let levelselection = document.getElementById("levelselection");
-            let html = "";
-            html += "<h1>Level Selection</h1>"
-            html += "<p>Please select a level to play</p>";
-            html += "<br>";
-            html += "<p>Module 1: Abstraction</p>";
-            for(let i=1;i<16;i++){
-                html += `<button class="button2">${i}</button>`;
-            }
-            html += "<br>";
-            html += "<br>";
-            html += "<p>Module 2: Decomposition</p>";
-            for(let i=16;i<31;i++){
-                html += `<button class="button2">${i}</button>`;
-            }
-            html += "<br>";
-            html += "<br>";
-            html += "<p>Module 3: Pattern recognization</p>";
-            for(let i=31;i<46;i++){
-                html += `<button class="button2">${i}</button>`;
-            }
-            html += "<br>";
-            html += "<br>";
-            html += "<p>Module 4: Algorithmic thinking</p>";
-            for(let i=46;i<61;i++){
-                html += `<button class="button2">${i}</button>`;
-            }
-            html += "<br>";
-            html += "<br>";
-            html += "<p>Module 5: Integrated exercises</p>";
-            for(let i=61;i<76;i++){
-                html += `<button class="button2">${i}</button>`;
-            }
-            html += "<br>";
-            html += "<br>";
-            html += "<button onclick=\"returnToMainMenu()\" class=\"button1\">Main Menu</button>";
-
-            levelselection.innerHTML = html;
-        }
-
-        function loadInfo(){
-            document.getElementById("mainmenu").innerHTML = "";
-            let info = document.getElementById("info");
-            let html = "";
-            html += "<h1>About CTThinker</h1>";
-            html += "<p>CTThinker is a tool developed to teach students vital computational thinking skills.</p>";
-            html += "<p>The tool contains 5 modules with 15 levels in each module.<\p>"
-            html += "<br>"
-            html += "<p>Module 1 focuses on abstraction<\p>"
-            html += "<p>Module 2 focuses on decomposition<\p>"
-            html += "<p>Module 3 focuses on patterns<\p>"
-            html += "<p>Module 4 focuses on algorithmic thinking<\p>"
-            html += "<p>Module 5 combines the previous 4 skills<\p>"
-            html += "<br>"
-            html += "<p>Initially all levels except the first one are locked</p>"
-            html += "<p>The next level will be unlocked once you complete a level.</p>"
-            html += "<br>"
-            html += "<p>The tool also provides feedbacks after completing each exercise<\p>"
-            html += "<p>to help students understand the solution.</p>"
-            html += "<button onclick=\"returnToMainMenu()\" class=\"button1\">Main Menu</button>";
-            info.innerHTML = html;
-        }
-
-        function returnToMainMenu() {
-            document.getElementById("info").innerHTML = "";
-            document.getElementById("levelselection").innerHTML = "";
-            loadMainMenu();
-        }
-    </script>
+    <script type="module" src="CTThinker.js"></script>
     <style>
         h1 {
             font-size: 50px;
@@ -123,15 +27,27 @@
             text-align: center;
             border: 1px solid black;
         }
-        .button1{
+        .checkbutton{
+            width: 70px;
             height: 40px;
-            font-size: 25px;
-            margin-bottom: 5px;
+            font-size: 20px;
+            background-color: lawngreen;
         }
         .button2{
-            height: 50px;
             width: 50px;
+            height: 50px;
             font-size: 30px;
+            margin-bottom: 5px;
+        }
+        .button1{
+            font-size: 20px;
+        }
+        .marked{
+            color: lightblue;
+        }
+        .input1{
+            font-size: 20px;
+            height: 40px;
         }
 
     </style>
@@ -141,5 +57,6 @@
 <div class="div1" id="mainmenu"></div>
 <div class="div1" id="info"></div>
 <div class="div1" id="levelselection"></div>
+<div class="div1" id="level"></div>
 </body>
 </html>

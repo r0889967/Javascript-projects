@@ -51,7 +51,7 @@
         var lastMoveRow;
         var lastMoveCol;
 
-        function turnToSymbol(turn){
+        function mapPlayerTurnToPiece(turn){
             if(turn === 0){
                 return "⚫";
             }else{
@@ -59,14 +59,18 @@
             }
         }
 
-        function generateBoard(){
-            let board = document.getElementById("board")
+        function getElem(id){
+            return document.getElementById(id);
+        }
+
+        function initializeBoard(){
+            let board = getElem("board")
             boardHtml = "";
             for (let i = 0; i < 15; i++) {
                 boardHtml += "<tr>";
                 for (let j = 0; j < 15; j++){
                     let cellStartTag = "<td";
-                    let cellOnClickStr = " onclick=placePiece("+i+","+j+")"
+                    let cellOnClickStr = " onclick=play("+i+","+j+")"
                     let cellId = " id="+i+"-"+j+">";
                     let cellEndTag = "</td>";
                     boardHtml += cellStartTag + cellOnClickStr + cellId+ cellEndTag;
@@ -77,29 +81,29 @@
         }
 
         function markLastMove(row,col){
-            let cell = document.getElementById(row+"-"+col);
+            let cell = getElem(row+"-"+col);
             cell.classList.add("newmove");
             lastMoveRow = row;
             lastMoveCol = col;
         }
 
         function unmarkLastMove(){
-            let cell = document.getElementById(lastMoveRow+"-"+lastMoveCol);
+            let cell = getElem(lastMoveRow+"-"+lastMoveCol);
             if(cell !== null) {
                 cell.classList.remove("newmove");
             }
         }
 
-        function placePiece(row,col){
+        function placePiece(cell){
+            cell.innerHTML = mapPlayerTurnToPiece(turn);
+        }
+
+        function play(row,col){
             if(!finished) {
-                let cell = document.getElementById(row + "-" + col)
+                let cell = getElem(row + "-" + col)
                 if (cell.innerText === "") {
                     unmarkLastMove();
-                    if (turn === 0) {
-                        cell.innerHTML = "⚫";
-                    } else {
-                        cell.innerHTML = "⚪️";
-                    }
+                    placePiece(cell);
                     checkWinner();
                     markLastMove(row,col);
                     if (!finished) {
@@ -117,20 +121,20 @@
         }
         function alternateTurns(){
             turn = (turn + 1) % 2;
-            document.getElementById("turn").innerHTML = "轮到"+turnToSymbol(turn)+"了";
+            getElem("turn").innerHTML = "轮到"+mapPlayerTurnToPiece(turn)+"了";
         }
 
         function restart(){
-            generateBoard();
+            initializeBoard();
             turn = 0;
             finished = false;
-            document.getElementById("winner").innerHTML = "";
-            document.getElementById("turn").innerHTML = "轮到⚫了";
+            getElem("winner").innerHTML = "";
+            getElem("turn").innerHTML = "轮到⚫了";
         }
 
         function cleanScores(){
             scores = [0,0];
-            document.getElementById("scores").innerHTML = "当前比分:⚫ 0-0 ⚪"
+            getElem("scores").innerHTML = "当前比分:⚫ 0-0 ⚪"
         }
 
         function areEqual(cell0,cell1,cell2,cell3,cell4){
@@ -141,11 +145,11 @@
         function checkH(){
             for (let i = 0; i < 15; i++) {
                 for (let j = 0; j < 11; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById(i+"-"+(j+1));
-                    let cell2 = document.getElementById(i+"-"+(j+2));
-                    let cell3 = document.getElementById(i+"-"+(j+3));
-                    let cell4 = document.getElementById(i+"-"+(j+4));
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem(i+"-"+(j+1));
+                    let cell2 = getElem(i+"-"+(j+2));
+                    let cell3 = getElem(i+"-"+(j+3));
+                    let cell4 = getElem(i+"-"+(j+4));
                     if(areEqual(cell0,cell1,cell2,cell3,cell4)){
                         endGame()
                     }
@@ -156,11 +160,11 @@
         function checkV(){
             for (let i = 0; i < 11; i++) {
                 for (let j = 0; j < 15; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById((i+1)+"-"+j);
-                    let cell2 = document.getElementById((i+2)+"-"+j);
-                    let cell3 = document.getElementById((i+3)+"-"+j);
-                    let cell4 = document.getElementById((i+4)+"-"+j);
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem((i+1)+"-"+j);
+                    let cell2 = getElem((i+2)+"-"+j);
+                    let cell3 = getElem((i+3)+"-"+j);
+                    let cell4 = getElem((i+4)+"-"+j);
                     if(areEqual(cell0,cell1,cell2,cell3,cell4)){
                         endGame()
                     }
@@ -171,11 +175,11 @@
         function checkD1(){
             for (let i = 0; i < 11; i++) {
                 for (let j = 0; j < 11; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById((i+1)+"-"+(j+1));
-                    let cell2 = document.getElementById((i+2)+"-"+(j+2));
-                    let cell3 = document.getElementById((i+3)+"-"+(j+3));
-                    let cell4 = document.getElementById((i+4)+"-"+(j+4));
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem((i+1)+"-"+(j+1));
+                    let cell2 = getElem((i+2)+"-"+(j+2));
+                    let cell3 = getElem((i+3)+"-"+(j+3));
+                    let cell4 = getElem((i+4)+"-"+(j+4));
                     if(areEqual(cell0,cell1,cell2,cell3,cell4)){
                         endGame()
                     }
@@ -186,11 +190,11 @@
         function checkD2(){
             for (let i = 0; i < 11; i++) {
                 for (let j = 4; j < 15; j++){
-                    let cell0 = document.getElementById(i+"-"+j);
-                    let cell1 = document.getElementById((i+1)+"-"+(j-1));
-                    let cell2 = document.getElementById((i+2)+"-"+(j-2));
-                    let cell3 = document.getElementById((i+3)+"-"+(j-3));
-                    let cell4 = document.getElementById((i+4)+"-"+(j-4));
+                    let cell0 = getElem(i+"-"+j);
+                    let cell1 = getElem((i+1)+"-"+(j-1));
+                    let cell2 = getElem((i+2)+"-"+(j-2));
+                    let cell3 = getElem((i+3)+"-"+(j-3));
+                    let cell4 = getElem((i+4)+"-"+(j-4));
                     if(areEqual(cell0,cell1,cell2,cell3,cell4)){
                         endGame()
                     }
@@ -198,15 +202,19 @@
             }
         }
 
-        function endGame(){
-            document.getElementById("winner").innerHTML = turnToSymbol(turn)+"赢了!"
+        function setScore(){
             scores[turn]++;
-            document.getElementById("scores").innerHTML = "当前比分:⚫ "+scores[0]+"-"+scores[1]+" ⚪️"
+            getElem("scores").innerHTML = "当前比分:⚫ "+scores[0]+"-"+scores[1]+" ⚪️"
+        }
+
+        function endGame(){
+            getElem("winner").innerHTML = mapPlayerTurnToPiece(turn)+"赢了!"
+            setScore();
             finished = true;
         }
     </script>
 </head>
-<body onload="generateBoard()">
+<body onload="initializeBoard()">
 <div id="gomokucontainer">
 <h1>五子棋</h1>
 <table id="board"></table>
