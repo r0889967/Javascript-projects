@@ -12,17 +12,21 @@ function loadMainMenu(){
     html += "<br>";
     html += "<br>";
     html += "<br>";
-    html += "<button onclick=\"loadLevelSelection()\" class=\"button1\">Start Game</button>";
+    html += createButton("button1","","Start Game","loadModuleSelectionScreen()");
     html += "<br>";
     html += "<br>";
     html += "<br>";
     html += "<br>";
-    html += "<button onclick=\"loadInfo()\" class=\"button1\">About CTThinker</button>";
+    html += createButton("button1","","About CTThinker","loadInfoScreen()");
     mainmenu.innerHTML = html;
 }
 
 function getElem(id){
     return document.getElementById(id);
+}
+
+function createButton(class_,id,text,onclickfunc){
+    return `<button class="${class_}" id="${id}" onclick="${onclickfunc}">${text}</button>`;
 }
 
 function toNextLevel(){
@@ -38,7 +42,7 @@ function loadFinishedScreen(){
 
 }
 
-function checkAnswerA(choices){
+function checkAnswerA(){
     let exercise = chosenExercises[selectedExerciseIdx];
     let markedIdxs = [];
     let showAnswer = getElem("showanswer");
@@ -97,8 +101,8 @@ function loadTypeAExercise(choices){
         buttonIdx++;
     }
     html += "<br>";
-    html += `<button class="button3" id="checkbutton" 
-onclick="checkAnswerA(${choices});getElem('checkbutton').disabled=true">Check</button></p>`;
+    html += `<button class="button3" id="checkbutton"
+onclick="checkAnswerA();getElem('checkbutton').disabled=true">Check</button></p>`;
     return html;
 }
 
@@ -117,6 +121,7 @@ function loadExerciseContents(){
     if(exercise != null){
         getElem("levelselection").innerHTML = "";
         html += `<h1>${exercise.title}</h1>`
+        console.log(exercise.text);
         for (let line of exercise.text) {
             html += `<p>${line}</p>`;
         }
@@ -132,18 +137,18 @@ function loadExerciseContents(){
         html += "<br>";
         html += "<br>";
         html += "<br>";
-        html += "<button onclick=\"returnToLevelSelection()\" class=\"button1\">Level Selection</button>";
+        html += "<button onclick=\"returnToModuleSelection()\" class=\"button1\">Module Selection</button>";
         level.innerHTML = html;
     }
 }
 
-function returnToLevelSelection(){
+function returnToModuleSelection(){
     getElem("level").innerHTML = "";
-    loadLevelSelection();
+    loadModuleSelectionScreen();
 }
 
 
-function loadLevelSelection(index){
+function loadModuleSelectionScreen(){
     getElem("mainmenu").innerHTML = "";
     let levelselection = getElem("levelselection");
     let html = "";
@@ -151,7 +156,7 @@ function loadLevelSelection(index){
     html += "<p>Please select a module to play</p>";
     html += "<br>";
     html += "<p>Module 1: Abstraction</p>";
-    html += `<button class="button1">Start Abstraction Exercises</button>`;
+    html += `<button class="button1" onclick="pickExercises(0);loadExerciseContents()">Start Abstraction Exercises</button>`;
 
     html += "<br>";
     html += "<br>";
@@ -180,7 +185,7 @@ function loadLevelSelection(index){
     levelselection.innerHTML = html;
 }
 
-function loadInfo(){
+function loadInfoScreen(){
     getElem("mainmenu").innerHTML = "";
     let info = getElem("info");
     let html = "";

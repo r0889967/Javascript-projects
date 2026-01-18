@@ -1,0 +1,42 @@
+h1 {
+    font-size: 50px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+p {
+    font-size: 20px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+tr{
+    border: 3px solid black;
+}
+td{
+    border: 3px solid black;
+}
+.div1{
+    place-items: center;
+    text-align: center;
+    border: 1px solid black;
+}
+.button3{
+    height: 40px;
+    font-size: 20px;
+    background-color: lawngreen;
+}
+.button2{
+    height: 45px;
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+.button1{
+    font-size: 20px;
+}
+.marked{
+    background-color: lightblue;
+}
+.input1{
+    font-size: 20px;
+    height: 40px;
+}
