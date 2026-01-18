@@ -28,7 +28,7 @@ function getElem(id){
 function toNextLevel(){
     selectedExerciseIdx++;
     if(selectedExerciseIdx < chosenExercisesCount) {
-        loadLevelContents();
+        loadExerciseContents();
     }else{
         loadFinishedScreen();
     }
@@ -38,18 +38,42 @@ function loadFinishedScreen(){
 
 }
 
-
-function checkAnswer(input){
+function checkAnswerA(choices){
     let exercise = chosenExercises[selectedExerciseIdx];
-    if(input===exercise.correctAnswer){
-        getElem("correctanswer").innerHTML = "The answer is correct!"+
-        `<button class="button3" onclick="toNextLevel()">Next Level</button>`;
-    }else{
-        getElem("correctanswer").innerHTML = "The answer is incorrect!";
+    let markedIdxs = [];
+    let showAnswer = getElem("showanswer");
+    for(let i = 0; i < exercise.choices.length; i++){
+        if(getElem(i).classList.contains("marked")){
+            markedIdxs.push(i);
+        }
     }
+    if(markedIdxs.toString()===exercise.correctAnswers.toString()){
+        showAnswer.style.color = "green";
+        showAnswer.innerHTML = "The answer is correct!";
+    }else{
+        showAnswer.style.color = "red";
+        showAnswer.innerHTML = "The answer is incorrect!";
+    }
+    showAnswer.innerHTML += `<button class="button1" onclick="toNextLevel()">Next Level</button>`;
+
 }
 
+function checkAnswerB(input){
+    let exercise = chosenExercises[selectedExerciseIdx];
+    let showAnswer = getElem("showanswer");
+    if(input===exercise.correctAnswer){
+        showAnswer.style.color = "green";
+        showAnswer.innerHTML = "The answer is correct!";
+    }else{
+        showAnswer.style.color = "red";
+        showAnswer.innerHTML = "The answer is incorrect!";
+    }
+    showAnswer.innerHTML += `<button class="button1" onclick="toNextLevel()">Next Level</button>`;
+}
+
+
 function pickExercises(moduleIdx){
+    selectedExerciseIdx = 0;
     chosenExercises = [];
     for(var i = 0; i < chosenExercisesCount; i++){
         let randomExerciseIdx = Math.floor(Math.random()*(Exercises[moduleIdx].length));
@@ -62,7 +86,31 @@ function pickExercises(moduleIdx){
     }
 }
 
-function loadLevelContents(){
+function loadTypeAExercise(choices){
+    let html = "";
+    html += `<p>Please mark the correct boxes</p>`;
+    html += "<br>"
+    let buttonIdx = 0;
+    for(let choice of choices) {
+        html += `<button class="button2" id=${buttonIdx} onclick="getElem(${buttonIdx}).classList.toggle('marked')">${choice}</button>`;
+        html += "<br>";
+        buttonIdx++;
+    }
+    html += "<br>";
+    html += `<button class="button3" id="checkbutton" 
+onclick="checkAnswerA(${choices});getElem('checkbutton').disabled=true">Check</button></p>`;
+    return html;
+}
+
+function loadTypeBExercise(){
+    let html = "";
+    html += `<p>Please enter your answer:<input class="input1" id="inputprompt" 
+><button class="button3" id="checkbutton" 
+onclick="checkAnswerB(getElem('inputprompt').value);getElem('checkbutton').disabled=true">Check</button></p>`;
+    return html;
+}
+
+function loadExerciseContents(){
     let exercise = chosenExercises[selectedExerciseIdx]
     let level = getElem("level");
     let html = "";
@@ -73,12 +121,14 @@ function loadLevelContents(){
             html += `<p>${line}</p>`;
         }
         html += "<br>";
-        if(exercise.type==='B') {
-            html += `<p>Please enter your answer:<input class="input1" id="inputprompt" 
-><button class="button3" onclick="checkAnswer(getElem('inputprompt').value)">Check</button></p>`;
+        if(exercise.type==='A'){
+            html += loadTypeAExercise(exercise.choices);
+        }
+        else if(exercise.type==='B') {
+            html += loadTypeBExercise();
         }
         html += "<br>";
-        html += `<p id="correctanswer"></p>`;
+        html += `<p id="showanswer"></p>`;
         html += "<br>";
         html += "<br>";
         html += "<br>";
@@ -111,7 +161,7 @@ function loadLevelSelection(index){
     html += "<br>";
     html += "<br>";
     html += "<p>Module 3: Pattern recognization</p>";
-    html += `<button class="button1" onclick="pickExercises(2);loadLevelContents()">Start Pattern Exercises</button>`;
+    html += `<button class="button1" onclick="pickExercises(2);loadExerciseContents()">Start Pattern Exercises</button>`;
 
     html += "<br>";
     html += "<br>";

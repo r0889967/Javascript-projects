@@ -61,13 +61,23 @@ let exercise3_5 = {
 }
 
 let exercise3_6 = {
-    title: "Exercise 3-6",
-    text:[]
+    title: "Find non-pattern sequences",
+    text:["Observe the following sequences carefully.",
+    "Which sequence(s) have no patterns?"],
+    type:"A",
+    choices: ["1,2,0,3,-1,4,-2,5,-3","1,2,6,24,48,144,576,1152,3456","1,6,7,9,16,17,19,27,29,31",
+        "1,3,6,10,15,21,28,36,45","1,121,1331,14441,155551,1666661","1,15,10,115,110,155,150,515,510","1,4,14,414,14414,41414414"],
+    correctAnswers : [2,5],
 }
 
 let exercise3_7 = {
-    title: "Exercise 3-7",
-    text:[]
+    title: "Find pattern sequences",
+    text:["Observe the sequences below carefully."," " +
+    "which sequence(s) have a pattern inside them?"],
+    type:"A",
+    choices: ["1,123,12345,1234567,123456789","1,10,101,1001,10010,100101,1001011","1,2,4,8,17,33,64,128,256,513","1,10,5,2,11,6,3,12,7,4",
+    "1,12,412,4128,164128,16412832","1,8,56,2,7,5,3,9,12,200","1,20,300,4000,50001,600000,7000000"],
+    correctAnswers : [0,3,4],
 }
 
 patternExercises.push(exercise3_1);
