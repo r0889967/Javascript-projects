@@ -1,10 +1,7 @@
-
-
-var selectedModuleId;
-var selectedExerciseId;
-var progress = 1;
-var chosenExercisesCount = 5;
+var selectedExerciseIdx = 0;
 var chosenExercises = [];
+var chosenExercisesCount = 4;
+
 
 function loadMainMenu(){
     let mainmenu = getElem("mainmenu");
@@ -29,13 +26,21 @@ function getElem(id){
 }
 
 function toNextLevel(){
-    progress++;
-    loadLevelContents(selectedModuleId,progress);
+    selectedExerciseIdx++;
+    if(selectedExerciseIdx < chosenExercisesCount) {
+        loadLevelContents();
+    }else{
+        loadFinishedScreen();
+    }
+}
+
+function loadFinishedScreen(){
+
 }
 
 
 function checkAnswer(input){
-    let exercise = chosenExercises[progress-1];
+    let exercise = chosenExercises[selectedExerciseIdx];
     if(input===exercise.correctAnswer){
         getElem("correctanswer").innerHTML = "The answer is correct!"+
         `<button class="button3" onclick="toNextLevel()">Next Level</button>`;
@@ -44,25 +49,21 @@ function checkAnswer(input){
     }
 }
 
-function pickExercises(midx){
-    let module = Exercises[midx];
-    let pickedExercises = [];
-    while(pickedExercises.length<chosenExercisesCount){
-        let eidx = Math.floor(Math.random()*module.length);
-        let exercise = Exercises[midx][eidx];
-        if(!pickedExercises.includes(exercise)){
-            pickedExercises.push(module[eidx]);
-        }else{
-            eidx = Math.floor(Math.random()*module.length);
+function pickExercises(moduleIdx){
+    chosenExercises = [];
+    for(var i = 0; i < chosenExercisesCount; i++){
+        let randomExerciseIdx = Math.floor(Math.random()*(Exercises[moduleIdx].length));
+        let exercise = Exercises[moduleIdx][randomExerciseIdx];
+        while(chosenExercises.includes(exercise)){
+            randomExerciseIdx = Math.floor(Math.random()*(Exercises[moduleIdx].length));
+            exercise = Exercises[moduleIdx][randomExerciseIdx];
         }
+        chosenExercises.push(exercise)
     }
-    chosenExercises = pickedExercises;
 }
 
-function loadLevelContents(midx,progress){
-    let exercise = chosenExercises[progress-1];
-    selectedModuleId = midx;
-    selectedExerciseId = progress-1;
+function loadLevelContents(){
+    let exercise = chosenExercises[selectedExerciseIdx]
     let level = getElem("level");
     let html = "";
     if(exercise != null){
@@ -80,7 +81,7 @@ function loadLevelContents(midx,progress){
         html += `<p id="correctanswer"></p>`;
         html += "<br>";
         html += "<br>";
-        html += `<p>${progress}/${chosenExercisesCount}</p>`;
+        html += "<br>";
         html += "<button onclick=\"returnToLevelSelection()\" class=\"button1\">Level Selection</button>";
         level.innerHTML = html;
     }
@@ -110,9 +111,7 @@ function loadLevelSelection(index){
     html += "<br>";
     html += "<br>";
     html += "<p>Module 3: Pattern recognization</p>";
-    html += `<button class="button1" onclick="
-pickExercises(2);
-loadLevelContents(2,progress)">Start Pattern Exercises</button>`;
+    html += `<button class="button1" onclick="pickExercises(2);loadLevelContents()">Start Pattern Exercises</button>`;
 
     html += "<br>";
     html += "<br>";
@@ -166,15 +165,6 @@ function returnToMainMenu() {
     loadMainMenu();
 }
 
-window.loadMainMenu = loadMainMenu;
-window.loadInfo = loadInfo;
-window.loadLevelContents = loadLevelContents;
-window.loadLevelSelection = loadLevelSelection;
-window.returnToMainMenu = returnToMainMenu;
-window.returnToLevelSelection = returnToLevelSelection;
-window.checkAnswer = checkAnswer;
-window.toNextLevel = toNextLevel;
-window.getElem = getElem;
-window.Exercises= Exercises;
+
 
 
