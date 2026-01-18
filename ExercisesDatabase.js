@@ -57,7 +57,7 @@ let exercise3_1 = {
     title: "Next number in sequence",
     text : ["Given the following sequence of numbers.",
         "2,5,10,17,28,41,58,77,100,129,?",
-        "What is the next number in the sequence? Please enter the answer below.",
+        "What is the next number in the sequence?",
         "Hint: it has something to do with prime numbers.",],
     type:"B",
     correctAnswer : "160",
@@ -67,7 +67,7 @@ let exercise3_2 = {
     title: "Next string in sequence",
     text:["Given the following sequence of strings.",
         "a, abb, cccabb, cccabbdddd, eeeeecccabbdddd, ?",
-        "What is the next string in the sequence? Please enter the answer below.",],
+        "What is the next string in the sequence?",],
     type:"B",
     correctAnswer : "eeeeecccabbddddffffff",
 }
@@ -76,7 +76,7 @@ let exercise3_3 = {
     title: "Next number in sequence",
     text:["Given the following sequence of numbers.",
         "5738, 121011, 33112, 6423, 1065, ?",
-        "What is the next number in the sequence? Please enter the answer below.",],
+        "What is the next number in the sequence?",],
     type:"B",
     correctAnswer : "1611",
 }
@@ -85,7 +85,7 @@ let exercise3_4 = {
     title: "Next number in sequence",
     text:["Given the following sequence of numbers.",
         "27, 9279, 27927927, ?",
-        "What is the next number in the sequence? Please enter the answer below."],
+        "What is the next number in the sequence?"],
     type:"B",
     correctAnswer : "812792792781",
 }
@@ -93,7 +93,7 @@ let exercise3_5 = {
     title: "Next string in sequence",
     text:["Given the following sequence of strings.",
     "a, ab, adad, ahahahah",
-    "What is the next string in the sequence? Please enter the answer below.",],
+    "What is the next string in the sequence?",],
     type:"B",
     correctAnswer : "apapapapapapapap",
 
